@@ -1,9 +1,10 @@
 import express from 'express';
 import CommonRouter from '../Commons/CommonRouter';
 import CommonNodeLoader from '../Commons/CommonNodeLoader';
-import { createErrorResponse, createProcessDTO, createSuccessResponse } from '../Utils/RouterUtils';
+import { createErrorResponse, createProcessDTO, createSuccessResponse } from '../Utils/Router';
+import ProcessDTO from '../Utils/ProcessDTO';
 
-const CUSTOM_NODE_PREFIX = 'hbpf.connector';
+export const CUSTOM_NODE_PREFIX = 'hbpf.connector';
 
 export default class CustomNodeRouter extends CommonRouter {
   private loader: CommonNodeLoader;
@@ -14,14 +15,17 @@ export default class CustomNodeRouter extends CommonRouter {
   }
 
   configureRoutes(): express.Application {
-    this.app.route('/custom_node/:name/process').post(((req, res) => {
+    this.app.route('/custom_node/:name/process').post(((req, res, next) => {
       try {
         const customNode = this.loader.get(CUSTOM_NODE_PREFIX, req.params.name);
-        const dto = customNode.processAction(createProcessDTO(req));
-
-        createSuccessResponse(res, dto);
+        customNode
+          .processAction(createProcessDTO(req))
+          .then((dto: ProcessDTO) => {
+            createSuccessResponse(res, dto);
+            next();
+          });
       } catch (e) {
-        createErrorResponse(res);
+        createErrorResponse(req, res, e);
       }
     }));
 
@@ -31,7 +35,7 @@ export default class CustomNodeRouter extends CommonRouter {
 
         res.json([]);
       } catch (e) {
-        createErrorResponse(res);
+        createErrorResponse(req, res, e);
       }
     });
 
@@ -39,7 +43,7 @@ export default class CustomNodeRouter extends CommonRouter {
       try {
         res.json(this.loader.getList(CUSTOM_NODE_PREFIX));
       } catch (e) {
-        createErrorResponse(res);
+        createErrorResponse(req, res, e);
       }
     });
 

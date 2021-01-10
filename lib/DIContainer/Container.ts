@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface Container {
     get(name: string): any;
-
     getAllByPrefix(prefix: string): Array<any>;
-
     set(name: string, service: any): void;
-
     has(name: string): boolean;
 }
 
@@ -43,8 +40,8 @@ export default class DIContainer implements Container {
     set(name: string, service: any): void {
       if (!this.has(name)) {
         this.services.set(name, service);
+      } else {
+        throw new Error(`Service with name "${name}" already exist!`);
       }
-
-      throw new Error(`Service with name "${name}" already exist!`);
     }
 }

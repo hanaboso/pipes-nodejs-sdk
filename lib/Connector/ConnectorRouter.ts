@@ -1,9 +1,10 @@
 import express from 'express';
 import CommonRouter from '../Commons/CommonRouter';
-import { createErrorResponse, createProcessDTO, createSuccessResponse } from '../Utils/RouterUtils';
+import { createErrorResponse, createProcessDTO, createSuccessResponse } from '../Utils/Router';
 import CommonNodeLoader from '../Commons/CommonNodeLoader';
+import ProcessDTO from '../Utils/ProcessDTO';
 
-const CONNECTOR_PREFIX = 'hbpf.connector';
+export const CONNECTOR_PREFIX = 'hbpf.connector';
 
 export default class ConnectorRouter extends CommonRouter {
     private loader: CommonNodeLoader;
@@ -14,14 +15,17 @@ export default class ConnectorRouter extends CommonRouter {
     }
 
     configureRoutes(): express.Application {
-      this.app.route('/connector/:name/action').post((req, res) => {
+      this.app.route('/connector/:name/action').post((req, res, next) => {
         try {
           const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
-          const dto = connector.processAction(createProcessDTO(req));
-
-          createSuccessResponse(res, dto);
+          connector
+            .processAction(createProcessDTO(req))
+            .then((dto: ProcessDTO) => {
+              createSuccessResponse(res, dto);
+              next();
+            });
         } catch (e) {
-          createErrorResponse(res);
+          createErrorResponse(req, res, e);
         }
       });
 
@@ -31,27 +35,30 @@ export default class ConnectorRouter extends CommonRouter {
 
           res.json([]);
         } catch (e) {
-          createErrorResponse(res);
+          createErrorResponse(req, res, e);
         }
       });
 
-      this.app.route('/connectors/list').get((req, res) => {
+      this.app.route('/connector/list').get((req, res) => {
         try {
           res.json(this.loader.getList(CONNECTOR_PREFIX));
         } catch (e) {
-          createErrorResponse(res);
+          createErrorResponse(req, res, e);
         }
       });
 
       // TODO: Deprecated
-      this.app.route('/connector/:name/webook').post((req, res) => {
+      this.app.route('/connector/:name/webook').post((req, res, next) => {
         try {
           const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
-          const dto = connector.processAction(createProcessDTO(req));
-
-          createSuccessResponse(res, dto);
+          connector
+            .processAction(createProcessDTO(req))
+            .then((dto: ProcessDTO) => {
+              createSuccessResponse(res, dto);
+              next();
+            });
         } catch (e) {
-          createErrorResponse(res);
+          createErrorResponse(req, res, e);
         }
       });
 
@@ -62,7 +69,7 @@ export default class ConnectorRouter extends CommonRouter {
 
           res.json([]);
         } catch (e) {
-          createErrorResponse(res);
+          createErrorResponse(req, res, e);
         }
       });
 

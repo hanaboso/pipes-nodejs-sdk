@@ -19,7 +19,11 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "max-len": [2, 120, 2, {
+            "ignoreUrls": true,
+            "ignoreComments": false
+        }]
     },
     "settings": {
         "import/resolver": {
