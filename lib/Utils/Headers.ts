@@ -1,5 +1,4 @@
-import { IncomingHttpHeaders } from 'http';
-
+// Framework prefix
 const PREFIX = 'pf-';
 
 // Framework headers
@@ -33,6 +32,8 @@ export const LIMIT_LAST_UPDATED = 'limit-last-update';
 
 const WHITE_LIST = ['content-type'];
 
+export type HttpHeaders = NodeJS.Dict<string | string[]>
+
 function existPrefix(key: string): boolean {
   return key.startsWith(PREFIX);
 }
@@ -41,16 +42,16 @@ export function createKey(key: string): string {
   return `${PREFIX}${key}`.toLowerCase();
 }
 
-export function get(key: string, headers: IncomingHttpHeaders): string | undefined {
+export function get(key: string, headers: HttpHeaders): string | undefined {
   if (headers[createKey(key)]) {
-    return String(headers[createKey(CORRELATION_ID)]);
+    return String(headers[createKey(key)]);
   }
 
   return undefined;
 }
 
-export function clear(headers: IncomingHttpHeaders): IncomingHttpHeaders {
-  const res : IncomingHttpHeaders = {};
+export function clear(headers: HttpHeaders): HttpHeaders {
+  const res : HttpHeaders = {};
   Object.entries(headers).forEach(
     ([key, value]) => {
       if (WHITE_LIST.includes(key.toLowerCase()) || existPrefix(key.toLowerCase())) {
@@ -61,22 +62,22 @@ export function clear(headers: IncomingHttpHeaders): IncomingHttpHeaders {
   return res;
 }
 
-export function getCorrelationId(headers: IncomingHttpHeaders): string | undefined {
+export function getCorrelationId(headers: HttpHeaders): string | undefined {
   return get(CORRELATION_ID, headers);
 }
 
-export function getNodeId(headers: IncomingHttpHeaders): string | undefined {
+export function getNodeId(headers: HttpHeaders): string | undefined {
   return get(NODE_ID, headers);
 }
 
-export function getProcessId(headers: IncomingHttpHeaders): string | undefined {
+export function getProcessId(headers: HttpHeaders): string | undefined {
   return get(PROCESS_ID, headers);
 }
 
-export function getParentId(headers: IncomingHttpHeaders): string | undefined {
+export function getParentId(headers: HttpHeaders): string | undefined {
   return get(PARENT_ID, headers);
 }
 
-export function getSequenceId(headers: IncomingHttpHeaders): number {
+export function getSequenceId(headers: HttpHeaders): number {
   return parseInt(get(SEQUENCE_ID, headers) || '0', 10);
 }

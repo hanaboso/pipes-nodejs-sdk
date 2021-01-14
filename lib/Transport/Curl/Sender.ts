@@ -1,4 +1,4 @@
-import fetch, { RequestInit } from 'node-fetch';
+import fetch, { RequestInit, Response } from 'node-fetch';
 import RequestDto from './RequestDto';
 import logger, { Logger } from '../../Logger/Logger';
 import ResponseDto from './ResponseDto';
@@ -12,34 +12,43 @@ function createInitFromDto(dto: RequestDto): RequestInit {
   };
 }
 
+async function log(req: RequestDto, res: Response, level: string): Promise<void> {
+  // TODO: optimization reading of response text
+  logger.log(
+    level,
+    `Request failed. 
+       Code: ${res.status},
+       Message: ${await res.text()},
+       Reason: ${res.statusText}`,
+    Logger.ctxFromDto(req.getDebugInfo()),
+  );
+}
+
 async function send(dto: RequestDto): Promise<ResponseDto> {
   // TODO: metrics
-  const response = await fetch(dto.getUrl(), createInitFromDto(dto));
-  const responseDto = new ResponseDto('', response.status, response.statusText);
+  return fetch(dto.getUrl(), createInitFromDto(dto))
+    .then((response) => {
+      if (!response.ok) {
+        log(dto, response, 'error');
+      } else {
+        log(dto, response, 'debug');
+      }
 
-  if (response.body !== null) {
-    responseDto.setBody(await response.text());
-  }
+      return response;
+    },
+    (reason) => {
+      logger.error(reason);
+      return Promise.reject(reason);
+    })
+    .then((response) => {
+      const responseDto = new ResponseDto('', response.status, response.statusText);
 
-  if (!response.ok) {
-    logger.error(
-      `Request failed. 
-       Code: ${responseDto.getResponseCode()},
-       Message: ${responseDto.getBody()},
-       Reason: ${responseDto.getReason()}`,
-      Logger.ctxFromDto(dto.getDebugInfo()),
-    );
-  } else {
-    logger.debug(
-      `Request success. 
-       Code: ${responseDto.getResponseCode()},
-       Message: ${responseDto.getBody()},
-       Reason: ${responseDto.getReason()}`,
-      Logger.ctxFromDto(dto.getDebugInfo()),
-    );
-  }
+      if (response.body !== null) {
+        response.text().then((body) => { responseDto.setBody(body); });
+      }
 
-  return Promise.resolve(responseDto);
+      return responseDto;
+    });
 }
 
 export default send;

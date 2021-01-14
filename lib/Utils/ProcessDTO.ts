@@ -1,7 +1,7 @@
-import { IncomingHttpHeaders } from 'http';
 import {
   clear,
   createKey,
+  HttpHeaders,
   LIMIT_KEY,
   LIMIT_LAST_UPDATED,
   LIMIT_TIME,
@@ -20,9 +20,9 @@ interface IProcessDTO {
     getJsonData(): unknown;
     setData(data: string): void;
     setJsonData(data: unknown): void;
-    getHeaders(): IncomingHttpHeaders;
+    getHeaders(): HttpHeaders;
     getHeader(key: string, defaultValue?: string): string|undefined;
-    setHeaders(headers: IncomingHttpHeaders): void;
+    setHeaders(headers: HttpHeaders): void;
     addHeader(key: string, value: string): void;
     removeHeader(key: string): void;
     removeHeaders(): void;
@@ -39,7 +39,7 @@ const ALLOWED_RESULT_CODES = [ResultCode.STOP_AND_FAILED, ResultCode.DO_NOT_CONT
 export default class ProcessDTO implements IProcessDTO {
     private data: string;
 
-    private headers: IncomingHttpHeaders;
+    private headers: HttpHeaders;
 
     constructor() {
       this.data = '';
@@ -62,7 +62,7 @@ export default class ProcessDTO implements IProcessDTO {
       this.data = JSON.stringify(body);
     }
 
-    getHeaders(): IncomingHttpHeaders {
+    getHeaders(): HttpHeaders {
       return this.headers;
     }
 
@@ -90,7 +90,7 @@ export default class ProcessDTO implements IProcessDTO {
       return undefined;
     }
 
-    setHeaders(headers: IncomingHttpHeaders): void {
+    setHeaders(headers: HttpHeaders): void {
       this.headers = clear(headers);
     }
 

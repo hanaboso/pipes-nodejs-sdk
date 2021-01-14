@@ -8,6 +8,8 @@ import * as headers from '../Utils/Headers';
 import { loggerOptions } from '../Config/Config';
 import winstonLogger from './Winston';
 
+// TODO: LogSeverity Enum
+
 export interface ILogContext {
     topology_id?: string;
     node_id?: string;
