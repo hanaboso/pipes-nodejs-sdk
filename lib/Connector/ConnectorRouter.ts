@@ -1,6 +1,6 @@
 import express from 'express';
 import CommonRouter from '../Commons/CommonRouter';
-import { createErrorResponse, createProcessDTO, createSuccessResponse } from '../Utils/Router';
+import { createProcessDTO, createSuccessResponse } from '../Utils/Router';
 import CommonNodeLoader from '../Commons/CommonNodeLoader';
 import ProcessDTO from '../Utils/ProcessDTO';
 
@@ -15,62 +15,42 @@ export default class ConnectorRouter extends CommonRouter {
     }
 
     configureRoutes(): express.Application {
-      this.app.route('/connector/:name/action').post((req, res, next) => {
-        try {
-          const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
-          connector
-            .processAction(createProcessDTO(req))
-            .then((dto: ProcessDTO) => {
+      this.app.route('/connector/:name/action').post(async (req, res, next) => {
+        const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        await connector
+          .processAction(createProcessDTO(req))
+          .then(
+            (dto: ProcessDTO) => {
               createSuccessResponse(res, dto);
               next();
-            });
-        } catch (e) {
-          createErrorResponse(req, res, e);
-        }
+            },
+          );
       });
 
       this.app.route('/connector/:name/action/test').get((req, res) => {
-        try {
-          this.loader.get(CONNECTOR_PREFIX, req.params.name);
-
-          res.json([]);
-        } catch (e) {
-          createErrorResponse(req, res, e);
-        }
+        this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        res.json([]);
       });
 
       this.app.route('/connector/list').get((req, res) => {
-        try {
-          res.json(this.loader.getList(CONNECTOR_PREFIX));
-        } catch (e) {
-          createErrorResponse(req, res, e);
-        }
+        res.json(this.loader.getList(CONNECTOR_PREFIX));
       });
 
       // TODO: Deprecated
-      this.app.route('/connector/:name/webook').post((req, res, next) => {
-        try {
-          const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
-          connector
-            .processAction(createProcessDTO(req))
-            .then((dto: ProcessDTO) => {
-              createSuccessResponse(res, dto);
-              next();
-            });
-        } catch (e) {
-          createErrorResponse(req, res, e);
-        }
+      this.app.route('/connector/:name/webhook').post(async (req, res, next) => {
+        const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        await connector
+          .processAction(createProcessDTO(req))
+          .then((dto: ProcessDTO) => {
+            createSuccessResponse(res, dto);
+            next();
+          });
       });
 
       // TODO: Deprecated
-      this.app.route('/connector/:name/webook/test').get((req, res) => {
-        try {
-          this.loader.get(CONNECTOR_PREFIX, req.params.name);
-
-          res.json([]);
-        } catch (e) {
-          createErrorResponse(req, res, e);
-        }
+      this.app.route('/connector/:name/webhook/test').get((req, res) => {
+        this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        res.json([]);
       });
 
       return this.app;

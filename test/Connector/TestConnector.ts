@@ -5,6 +5,7 @@ import send from '../../lib/Transport/Curl/Sender';
 import RequestDto from '../../lib/Transport/Curl/RequestDto';
 import ResponseDto from '../../lib/Transport/Curl/ResponseDto';
 import HttpMethods from '../../lib/Transport/HttpMethods';
+import OnRepeatException from '../../lib/Exception/OnRepeatException';
 
 export default class TestConnector implements ICommonNode {
   getName(): string {
@@ -17,6 +18,9 @@ export default class TestConnector implements ICommonNode {
 
     const requestDto = new RequestDto('http://jsonplaceholder.typicode.com/users', HttpMethods.GET, dto);
     return send(requestDto).then((r: ResponseDto) => {
+      if (r.getResponseCode() !== 200) {
+        throw new OnRepeatException(dto);
+      }
       dto.setData(r.getBody());
 
       return dto;

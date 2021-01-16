@@ -112,7 +112,7 @@ export default class ProcessDTO implements IProcessDTO {
         throw new Error('Value maxHops is obligatory and can not be lower than 0');
       }
 
-      this.setStatusHeader(ResultCode.REPEAT, message);
+      this.setStatusHeader(ResultCode.REPEAT, message ?? 'Repeater applied.');
 
       this.addHeader(createKey(REPEAT_INTERVAL), interval.toString());
       this.addHeader(createKey(REPEAT_MAX_HOPS), maxHops.toString());
@@ -139,7 +139,7 @@ export default class ProcessDTO implements IProcessDTO {
       this.addHeader(createKey(LIMIT_VALUE), value.toString());
 
       if (lastUpdate) {
-        this.addHeader(LIMIT_LAST_UPDATED, lastUpdate.toString());
+        this.addHeader(createKey(LIMIT_LAST_UPDATED), lastUpdate.toString());
       }
     }
 

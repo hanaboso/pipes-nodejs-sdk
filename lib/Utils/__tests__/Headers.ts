@@ -11,7 +11,7 @@ const mockedHeaders: HttpHeaders = {
   fake: 'header',
 };
 
-describe('Headers', () => {
+describe('Test headers utils', () => {
   it('createKey', () => {
     const k = createKey('new-test-key');
     expect(k).toEqual('pf-new-test-key');

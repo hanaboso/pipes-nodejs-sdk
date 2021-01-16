@@ -29,9 +29,9 @@ async function send(dto: RequestDto): Promise<ResponseDto> {
   return fetch(dto.getUrl(), createInitFromDto(dto))
     .then((response) => {
       if (!response.ok) {
-        log(dto, response, 'error');
+        log(dto, response.clone(), 'error');
       } else {
-        log(dto, response, 'debug');
+        log(dto, response.clone(), 'debug');
       }
 
       return response;
@@ -40,11 +40,11 @@ async function send(dto: RequestDto): Promise<ResponseDto> {
       logger.error(reason);
       return Promise.reject(reason);
     })
-    .then((response) => {
+    .then(async (response) => {
       const responseDto = new ResponseDto('', response.status, response.statusText);
 
       if (response.body !== null) {
-        response.text().then((body) => { responseDto.setBody(body); });
+        responseDto.setBody(await response.text());
       }
 
       return responseDto;

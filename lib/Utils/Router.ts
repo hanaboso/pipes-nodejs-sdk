@@ -31,7 +31,7 @@ export function createErrorResponse(req: Request, res: Response, e?: Error): voi
     responseBody = formatError(e);
 
     if (appOptions.debug && !res.hasHeader(createKey(RESULT_DETAIL))) {
-      res.setHeader(createKey(RESULT_DETAIL), e.stack ?? '');
+      res.setHeader(createKey(RESULT_DETAIL), e.stack === undefined ? '' : e.stack);
     }
   }
 
