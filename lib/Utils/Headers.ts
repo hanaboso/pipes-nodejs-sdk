@@ -25,10 +25,7 @@ export const REPEAT_MAX_HOPS = 'repeat-max-hops';
 export const REPEAT_HOPS = 'repeat-hops';
 
 // Limiter headers
-export const LIMIT_KEY = 'limit-key';
-export const LIMIT_TIME = 'limit-time';
-export const LIMIT_VALUE = 'limit-value';
-export const LIMIT_LAST_UPDATED = 'limit-last-update';
+export const LIMITER_KEY = 'limiter-key';
 
 const WHITE_LIST = ['content-type'];
 
@@ -80,4 +77,12 @@ export function getParentId(headers: HttpHeaders): string | undefined {
 
 export function getSequenceId(headers: HttpHeaders): number {
   return parseInt(get(SEQUENCE_ID, headers) || '0', 10);
+}
+
+export function getRepeatHops(headers: HttpHeaders): number {
+  return parseInt(get(REPEAT_HOPS, headers) || '0', 10);
+}
+
+export function getRepeaterMaxHops(headers: HttpHeaders): number {
+  return parseInt(get(REPEAT_MAX_HOPS, headers) || '0', 10);
 }

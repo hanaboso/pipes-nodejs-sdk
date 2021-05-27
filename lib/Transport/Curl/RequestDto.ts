@@ -4,24 +4,15 @@ import ProcessDTO from '../../Utils/ProcessDTO';
 import HttpMethods from '../HttpMethods';
 
 export default class RequestDto implements IRequestDto {
-    private url: string;
-
-    private method: HttpMethods;
-
-    private body: string | undefined;
-
-    private headers: HeaderInit | undefined;
-
     private timeout: number;
 
-    private debugInfo: ProcessDTO;
-
-    constructor(url: string, method: HttpMethods, debugInfo: ProcessDTO, body?: string, headers?: HeaderInit) {
-      this.url = url;
-      this.method = method;
-      this.debugInfo = debugInfo;
-      this.body = body;
-      this.headers = headers;
+    constructor(
+        private url: string,
+        private method: HttpMethods,
+        private debugInfo: ProcessDTO,
+        private body?: string,
+        private headers?: HeaderInit,
+    ) {
       this.timeout = 10000; // 10sec as a default timeout
     }
 

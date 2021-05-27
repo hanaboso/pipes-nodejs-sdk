@@ -1,15 +1,16 @@
 import winston from 'winston';
+import Severity from './Severity';
 
 let level;
 switch (process.env.NODE_ENV) {
   case 'debug':
-    level = 'debug';
+    level = Severity.DEBUG;
     break;
   case 'test':
-    level = 'alert';
+    level = Severity.WARNING;
     break;
   default:
-    level = 'debug'; // TODO: info
+    level = Severity.INFO;
 }
 
 const consoleT = new winston.transports.Console({

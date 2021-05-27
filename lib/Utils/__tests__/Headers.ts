@@ -1,5 +1,16 @@
 import {
-  HttpHeaders, NODE_ID, createKey, get, clear, getCorrelationId, getNodeId, getProcessId, getParentId, getSequenceId,
+  HttpHeaders,
+  NODE_ID,
+  createKey,
+  get,
+  clear,
+  getCorrelationId,
+  getNodeId,
+  getProcessId,
+  getParentId,
+  getSequenceId,
+  getRepeatHops,
+  getRepeaterMaxHops,
 } from '../Headers';
 
 const mockedHeaders: HttpHeaders = {
@@ -8,6 +19,8 @@ const mockedHeaders: HttpHeaders = {
   'pf-process-id': 'processId',
   'pf-parent-id': 'parentId',
   'pf-sequence-id': '1',
+  'pf-repeat-hops': '2',
+  'pf-repeat-max-hops': '10',
   fake: 'header',
 };
 
@@ -36,6 +49,8 @@ describe('Test headers utils', () => {
         'pf-process-id': 'processId',
         'pf-parent-id': 'parentId',
         'pf-sequence-id': '1',
+        'pf-repeat-hops': '2',
+        'pf-repeat-max-hops': '10',
       },
     );
   });
@@ -69,6 +84,30 @@ describe('Test headers utils', () => {
     const updatedHeaders = mockedHeaders;
     delete (updatedHeaders['pf-sequence-id']);
     const v = getSequenceId(updatedHeaders);
+    expect(v).toEqual(0);
+  });
+
+  it('getRepeatHops', () => {
+    const v = getRepeatHops(mockedHeaders);
+    expect(v).toEqual(2);
+  });
+
+  it('getRepeatHops if not exist', () => {
+    const updatedHeaders = mockedHeaders;
+    delete (updatedHeaders['pf-repeat-hops']);
+    const v = getRepeatHops(updatedHeaders);
+    expect(v).toEqual(0);
+  });
+
+  it('getRepeaterMaxHops', () => {
+    const v = getRepeaterMaxHops(mockedHeaders);
+    expect(v).toEqual(10);
+  });
+
+  it('getRepeaterMaxHops if not exist', () => {
+    const updatedHeaders = mockedHeaders;
+    delete (updatedHeaders['pf-repeat-max-hops']);
+    const v = getRepeaterMaxHops(updatedHeaders);
     expect(v).toEqual(0);
   });
 });

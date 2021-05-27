@@ -70,6 +70,14 @@ describe('Tests ProcessDTO utils', () => {
     expect(dto.getHeader('pf-result-message')).toEqual('ok');
   });
 
+  it('setSuccessProcess without message', () => {
+    const dto = new ProcessDTO();
+    dto.setSuccessProcess();
+
+    expect(dto.getHeader('pf-result-code')).toEqual('0');
+    expect(dto.getHeader('pf-result-message')).toBeUndefined();
+  });
+
   it('setStopProcess', () => {
     const dto = new ProcessDTO();
     dto.setStopProcess(ResultCode.STOP_AND_FAILED, 'nok');
@@ -110,7 +118,7 @@ describe('Tests ProcessDTO utils', () => {
     expect(dto.getHeader('pf-repeat-max-hops')).toEqual('30');
     expect(dto.getHeader('pf-repeat-hops')).toBeUndefined();
     expect(dto.getHeader('pf-repeat-queue')).toBeUndefined();
-    expect(dto.getHeader('pf-result-message')).toBeUndefined();
+    expect(dto.getHeader('pf-result-message')).toEqual('Repeater applied.');
   });
 
   it('setRepeater with unsupported parameters', () => {
@@ -119,30 +127,29 @@ describe('Tests ProcessDTO utils', () => {
     expect(() => dto.setRepeater(1, -1)).toThrow(Error);
   });
 
-  it('setLimiter and removeLimiter', () => {
-    const d = new Date();
+  it('increment current repeaterHop', () => {
     const dto = new ProcessDTO();
-    dto.setLimiter('limit-key', 60, 10000, d);
+    dto.setRepeater(1, 2);
+    expect(dto.getHeader('pf-repeat-hops')).toBeUndefined();
 
-    expect(dto.getHeader('pf-limit-key')).toEqual('limit-key');
-    expect(dto.getHeader('pf-limit-time')).toEqual('60');
-    expect(dto.getHeader('pf-limit-value')).toEqual('10000');
-    expect(dto.getHeader('pf-limit-last-update')).toEqual(d.toString());
+    dto.incrementRepeaterHop();
+    expect(dto.getHeader('pf-repeat-hops')).toEqual('1');
+  });
+
+  it('setLimiter and removeLimiter', () => {
+    const dto = new ProcessDTO();
+    dto.setLimiter('limit-key|user', 60, 10000);
+
+    expect(dto.getHeader('pf-limiter-key')).toEqual('limit-key|user;60;10000');
 
     dto.removeLimiter();
-    expect(dto.getHeader('pf-limit-key')).toBeUndefined();
-    expect(dto.getHeader('pf-limit-time')).toBeUndefined();
-    expect(dto.getHeader('pf-limit-value')).toBeUndefined();
-    expect(dto.getHeader('pf-limit-last-update')).toBeUndefined();
+    expect(dto.getHeader('pf-limiter-key')).toBeUndefined();
   });
 
   it('setLimiter without optional attributes', () => {
     const dto = new ProcessDTO();
-    dto.setLimiter('limit-key2', 30, 5000);
+    dto.setLimiterWithGroup('limit-key2', 30, 5000, 'group1', 200, 4444);
 
-    expect(dto.getHeader('pf-limit-key')).toEqual('limit-key2');
-    expect(dto.getHeader('pf-limit-time')).toEqual('30');
-    expect(dto.getHeader('pf-limit-value')).toEqual('5000');
-    expect(dto.getHeader('pf-limit-last-update')).toBeUndefined();
+    expect(dto.getHeader('pf-limiter-key')).toEqual('limit-key2|;30;5000;group1|;200;4444');
   });
 });

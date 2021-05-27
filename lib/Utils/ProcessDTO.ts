@@ -1,11 +1,10 @@
+import * as util from 'util';
 import {
   clear,
   createKey,
+  getRepeatHops,
   HttpHeaders,
-  LIMIT_KEY,
-  LIMIT_LAST_UPDATED,
-  LIMIT_TIME,
-  LIMIT_VALUE,
+  LIMITER_KEY,
   REPEAT_HOPS,
   REPEAT_INTERVAL,
   REPEAT_MAX_HOPS,
@@ -126,6 +125,11 @@ export default class ProcessDTO implements IProcessDTO {
       }
     }
 
+    incrementRepeaterHop(): void {
+      const hop = getRepeatHops(this.headers) + 1;
+      this.addHeader(createKey(REPEAT_HOPS), hop.toString());
+    }
+
     removeRepeater(): void {
       this.removeHeader(createKey(REPEAT_INTERVAL));
       this.removeHeader(createKey(REPEAT_MAX_HOPS));
@@ -133,21 +137,33 @@ export default class ProcessDTO implements IProcessDTO {
       this.removeHeader(createKey(REPEAT_QUEUE));
     }
 
-    setLimiter(key: string, time: number, value: number, lastUpdate?: Date): void {
-      this.addHeader(createKey(LIMIT_KEY), key);
-      this.addHeader(createKey(LIMIT_TIME), time.toString());
-      this.addHeader(createKey(LIMIT_VALUE), value.toString());
+    setLimiter(key: string, time: number, amount: number): void {
+      const lk = util.format('%s;%s;%s', ProcessDTO.decorateLimitKey(key), time, amount);
+      this.addHeader(createKey(LIMITER_KEY), lk);
+    }
 
-      if (lastUpdate) {
-        this.addHeader(createKey(LIMIT_LAST_UPDATED), lastUpdate.toString());
-      }
+    setLimiterWithGroup(
+      key: string,
+      time: number,
+      amount: number,
+      groupKey: string,
+      groupTime: number,
+      groupAmount: number,
+    ): void {
+      const lk = util.format(
+        '%s;%s;%s;%s;%s;%s',
+        ProcessDTO.decorateLimitKey(key),
+        time,
+        amount,
+        ProcessDTO.decorateLimitKey(groupKey),
+        groupTime,
+        groupAmount,
+      );
+      this.addHeader(createKey(LIMITER_KEY), lk);
     }
 
     removeLimiter(): void {
-      this.removeHeader(createKey(LIMIT_KEY));
-      this.removeHeader(createKey(LIMIT_TIME));
-      this.removeHeader(createKey(LIMIT_VALUE));
-      this.removeHeader(createKey(LIMIT_LAST_UPDATED));
+      this.removeHeader(createKey(LIMITER_KEY));
     }
 
     private setStatusHeader(value: ResultCode, message?: string) {
@@ -155,6 +171,15 @@ export default class ProcessDTO implements IProcessDTO {
         this.addHeader(createKey(RESULT_MESSAGE), message);
       }
       this.addHeader(createKey(RESULT_CODE), value.toString());
+    }
+
+    private static decorateLimitKey(key: string): string {
+      let newKey = key;
+      if (!key.includes('|')) {
+        newKey = util.format('%s|', key);
+      }
+
+      return newKey;
     }
 
     private static validateStatus(code: number): void {

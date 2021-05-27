@@ -7,8 +7,7 @@ import ResultCode from '../Utils/ResultCode';
 import * as headers from '../Utils/Headers';
 import { loggerOptions } from '../Config/Config';
 import winstonLogger from './Winston';
-
-// TODO: LogSeverity Enum
+import Severity from './Severity';
 
 export interface ILogContext {
     topology_id?: string;
@@ -111,7 +110,7 @@ export class Logger {
      * @param {ILogContext} context
      */
     public debug(message: string, context?: ILogContext): void {
-      this.log('debug', message, context || {});
+      this.log(Severity.DEBUG, message, context || {});
     }
 
     /**
@@ -120,7 +119,7 @@ export class Logger {
      * @param {ILogContext} context
      */
     public info(message: string, context?: ILogContext): void {
-      this.log('info', message, context || {});
+      this.log(Severity.INFO, message, context || {});
     }
 
     /**
@@ -129,7 +128,7 @@ export class Logger {
      * @param {ILogContext} context
      */
     public warn(message: string, context?: ILogContext): void {
-      this.log('warn', message, context || {});
+      this.log(Severity.WARNING, message, context || {});
     }
 
     /**
@@ -138,7 +137,7 @@ export class Logger {
      * @param {ILogContext} context
      */
     public error(message: string, context?: ILogContext): void {
-      this.log('error', message, context || {});
+      this.log(Severity.ERROR, message, context || {});
     }
 
     /**

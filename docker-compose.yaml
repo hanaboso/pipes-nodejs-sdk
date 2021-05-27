@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+
+    logstash:
+        image: mendhak/udp-listener
+        ports:
+            - 5120:5005
+
+    kapacitor:
+        image: mendhak/udp-listener
+        ports:
+            - 4444:5005

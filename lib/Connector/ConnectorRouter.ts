@@ -10,7 +10,7 @@ export default class ConnectorRouter extends CommonRouter {
     private loader: CommonNodeLoader;
 
     constructor(app: express.Application, loader: CommonNodeLoader) {
-      super(app, 'ConnectorRouters');
+      super(app, 'ConnectorRouter');
       this.loader = loader;
     }
 
