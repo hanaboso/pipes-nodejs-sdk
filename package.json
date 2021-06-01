@@ -6,6 +6,7 @@
   "scripts": {
     "bench": "autocannon -c 200 -d 20 -m POST localhost:8080/connector/test/action",
     "test:unit": "APP_DEBUG=debug jest --coverage --detectOpenHandles",
+    "test:ci": "APP_DEBUG=debug jest",
     "lint": "eslint lib/**/*.ts --fix",
     "start": "nodemon index.ts",
     "build": "tsc --project ./"
