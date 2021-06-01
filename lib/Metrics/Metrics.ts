@@ -4,14 +4,14 @@ import { metricsOptions } from '../Config/Config';
 import logger from '../Logger/Logger';
 
 export interface IStartMetrics {
-    timestamp: bigint
-    cpu: ICpuTimes
+    timestamp: bigint,
+    cpu: ICpuTimes,
 }
 
 export interface ITimesMetrics {
     requestDuration: bigint,
     userTime: number,
-    kernelTime: number
+    kernelTime: number,
 }
 
 export async function sendProcessMetrics(
