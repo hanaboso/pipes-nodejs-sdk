@@ -1,6 +1,6 @@
 // Mock Logger module
 import { Application } from 'express';
-import CommonNodeLoader from '../../Commons/CommonNodeLoader';
+import CommonLoader from '../../Commons/CommonLoader';
 import ConnectorRouter from '../ConnectorRouter';
 
 jest.mock('../../Logger/Logger', () => ({
@@ -28,7 +28,7 @@ describe('Test ConnectorRouter', () => {
     const loaderMock = {
       get: jest.fn(),
       getList: jest.fn(),
-    } as never as CommonNodeLoader;
+    } as never as CommonLoader;
 
     const router = new ConnectorRouter(expressMock, loaderMock);
     expect(routeFn).toBeCalledTimes(5);
