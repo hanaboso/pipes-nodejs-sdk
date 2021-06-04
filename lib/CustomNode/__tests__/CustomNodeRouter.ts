@@ -1,6 +1,6 @@
 import { Application } from 'express';
 import CustomNodeRouter from '../CustomNodeRouter';
-import CommonNodeLoader from '../../Commons/CommonNodeLoader';
+import CommonLoader from '../../Commons/CommonLoader';
 
 // Mock Logger module
 jest.mock('../../Logger/Logger', () => ({
@@ -28,7 +28,7 @@ describe('Test CustomNodeRouter', () => {
     const loaderMock = {
       get: jest.fn(),
       getList: jest.fn(),
-    } as never as CommonNodeLoader;
+    } as never as CommonLoader;
 
     const router = new CustomNodeRouter(expressMock, loaderMock);
     expect(routeFn).toBeCalledTimes(3);

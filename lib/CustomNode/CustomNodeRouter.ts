@@ -1,13 +1,13 @@
 import express, { Request, Response } from 'express';
 import CommonRouter from '../Commons/CommonRouter';
-import CommonNodeLoader from '../Commons/CommonNodeLoader';
+import CommonLoader from '../Commons/CommonLoader';
 import { createProcessDTO, createSuccessResponse } from '../Utils/Router';
 import ProcessDTO from '../Utils/ProcessDTO';
 
 export const CUSTOM_NODE_PREFIX = 'hbpf.connector';
 
 export default class CustomNodeRouter extends CommonRouter {
-  constructor(app: express.Application, private loader: CommonNodeLoader) {
+  constructor(app: express.Application, private loader: CommonLoader) {
     super(app, 'CustomNodeRouter');
   }
 
