@@ -1,6 +1,6 @@
 import express from 'express';
 import DIContainer from '../DIContainer/Container';
-import CommonNodeLoader from '../Commons/CommonNodeLoader';
+import CommonLoader from '../Commons/CommonLoader';
 import ConnectorRouter from '../Connector/ConnectorRouter';
 import CommonRouter from '../Commons/CommonRouter';
 import logger from '../Logger/Logger';
@@ -15,7 +15,7 @@ const sdk: express.Application = express();
 
 sdk.use(metricsHandler);
 const container = new DIContainer();
-const loader = new CommonNodeLoader(container);
+const loader = new CommonLoader(container);
 routes.push(new ConnectorRouter(sdk, loader));
 routes.push(new CustomNodeRouter(sdk, loader));
 
