@@ -14,9 +14,6 @@ export class Field {
         private _value: any = null,
         private required: boolean = false,
     ) {
-        if (!this.types.includes(_type)) {
-            //TODO exception
-        }
     }
 
     public get type() {
@@ -55,27 +52,28 @@ export class Field {
         return this.disabled;
     }
 
-    public get types() {
-        return Object.values(FieldType);
-    }
-
     public get toArray() {
 
         return {
-            'type': this.type,
-            'key': this.key,
-            'value': this.value,
-            'label': this.label,
-            'description': this.description,
-            'required': this.isRequired,
-            'readOnly': this.isReadOnly,
-            'disabled': this.isDisabled,
-            'choices': this.choices,
+            type: this.type,
+            key: this.key,
+            value: this.value,
+            label: this.label,
+            description: this.description,
+            required: this.isRequired,
+            readOnly: this.isReadOnly,
+            disabled: this.isDisabled,
+            choices: this.choices,
         };
     }
 
     public setLabel(label: string): Field {
         this._label = label;
+        return this;
+    }
+
+    public setValue(value: any): Field {
+        this._value = value;
         return this;
     }
 

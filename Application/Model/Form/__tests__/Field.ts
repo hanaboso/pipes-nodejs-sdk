@@ -7,22 +7,16 @@ describe('Field tests', () => {
     const label = 'testLabel';
     const field = new Field(type, key, label);
 
-    const types = [
-        'text',
-        'number',
-        'url',
-        'password',
-        'selectbox',
-        'checkbox',
-    ];
-
-    it('getTypes', () => {
-        expect(field.types).toEqual(types);
+    it('setValue', function () {
+        expect(field.value).toEqual(null);
+        field.setValue(true);
+        expect(field.value).toEqual(true);
     });
 
     it('getType', () => {
         expect(field.type).toEqual(type);
     });
+
     it('getKey', () => {
         expect(field.key).toEqual(key);
     });
@@ -65,15 +59,15 @@ describe('Field tests', () => {
     });
     it('toArray', () => {
         const array = {
-            'type': field.type,
-            'key': field.key,
-            'value': field.value,
-            'label': field.label,
-            'description': field.description,
-            'required': field.isRequired,
-            'readOnly': field.isReadOnly,
-            'disabled': field.isDisabled,
-            'choices': field.choices,
+            type: field.type,
+            key: field.key,
+            value: field.value,
+            label: field.label,
+            description: field.description,
+            required: field.isRequired,
+            readOnly: field.isReadOnly,
+            disabled: field.isDisabled,
+            choices: field.choices,
         };
         expect(field.toArray).toEqual(array);
     });
