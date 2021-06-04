@@ -15,7 +15,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/dateformat": "^3.0.1",
     "@types/express": "^4.17.9",
+    "dateformat": "^4.5.1",
     "express": "^5.0.0-alpha.8",
     "metrics-sender": "^0.0.8",
     "node-fetch": "^2.6.1",
