@@ -30,9 +30,6 @@ lint:
 	$(DCS) yarn lint
 
 unit:
-	$(DCS) yarn test:ci
-
-coverage:
 	$(DCS) yarn test:unit
 
 fasttest: lint unit

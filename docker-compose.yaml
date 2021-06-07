@@ -14,10 +14,21 @@ services:
             UDP_LOGGER_PORT: 5005
             METRICS_HOST: kapacitor
             METRICS_PORT: 5005
+            MONGO_DSN: 'mongodb://mongo:27017'
         command: sleep infinity
+
+    mongo:
+        image: mongo:latest
+        ports:
+        -   0.0.0.0:27017:27017
+        volumes:
+        -   mongo:/data/db
 
     logstash:
         image: mendhak/udp-listener
 
     kapacitor:
         image: mendhak/udp-listener
+
+volumes:
+    mongo: {}
