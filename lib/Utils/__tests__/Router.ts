@@ -9,13 +9,14 @@ import { createKey, NODE_ID } from '../Headers';
 jest.mock('../../Logger/Logger', () => ({
   error: () => jest.fn(),
   debug: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Logger: jest.fn().mockImplementation(() => ({})),
 }));
 
 // Mock Logger.ctxFromReq static method
-const MockedLogger = mocked(Logger, true);
-MockedLogger.ctxFromReq = jest.fn();
-MockedLogger.ctxFromDto = jest.fn();
+const mockedLogger = mocked(Logger, true);
+mockedLogger.ctxFromReq = jest.fn();
+mockedLogger.ctxFromDto = jest.fn();
 
 // Mock Request/Response of Express
 const mockedRequest = () => ({
@@ -28,7 +29,7 @@ function mockRequest(): Request {
 }
 
 const mockedResponse = (
-  status: ()=> void, hasHeader: ()=> void, setHeader: ()=> void, json?: ()=> void, send?: ()=> void,
+  status: () => void, hasHeader: () => void, setHeader: () => void, json?: () => void, send?: () => void,
 ) => ({
   status,
   hasHeader,
@@ -48,7 +49,7 @@ function mockResponseFn(hasHeader: boolean) {
 }
 
 function mockResponse(
-  status: ()=> void, hasHeader: ()=> void, setHeader: ()=> void, json?: ()=> void, send?: ()=> void,
+  status: () => void, hasHeader: () => void, setHeader: () => void, json?: () => void, send?: () => void,
 ) {
   return mockedResponse(status, hasHeader, setHeader, json, send) as unknown as Response;
 }

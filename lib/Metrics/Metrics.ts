@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ITagsMap, Metrics } from 'metrics-sender/dist/lib/metrics/Metrics';
 import { ICpuTimes, getCpuTimes, getCurrentTimestamp } from '../Utils/SystemUsage';
 import { metricsOptions } from '../Config/Config';

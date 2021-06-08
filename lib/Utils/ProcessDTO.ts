@@ -36,71 +36,71 @@ interface IProcessDTO {
 const ALLOWED_RESULT_CODES = [ResultCode.STOP_AND_FAILED, ResultCode.DO_NOT_CONTINUE];
 
 export default class ProcessDTO implements IProcessDTO {
-    private data: string;
+    private _data: string;
 
-    private headers: HttpHeaders;
+    private _headers: HttpHeaders;
 
     constructor() {
-      this.data = '';
-      this.headers = {};
+      this._data = '';
+      this._headers = {};
     }
 
     getData(): string {
-      return this.data;
+      return this._data;
     }
 
     getJsonData(): unknown {
-      return JSON.parse(this.data);
+      return JSON.parse(this._data);
     }
 
     setData(data: string): void {
-      this.data = data;
+      this._data = data;
     }
 
     setJsonData(body: unknown): void {
-      this.data = JSON.stringify(body);
+      this._data = JSON.stringify(body);
     }
 
     getHeaders(): HttpHeaders {
-      return this.headers;
+      return this._headers;
     }
 
     addHeader(key: string, value: string): void {
-      this.headers[key] = value;
+      this._headers[key] = value;
     }
 
     removeHeader(key: string): void {
-      delete (this.headers[key]);
+      delete (this._headers[key]);
     }
 
     removeHeaders(): void {
-      this.headers = {};
+      this._headers = {};
     }
 
     getHeader(key: string, defaultValue?: string): string | undefined {
-      if (!this.headers[key] && defaultValue) {
+      if (!this._headers[key] && defaultValue) {
         return defaultValue;
       }
 
-      if (this.headers[key]) {
-        return String(this.headers[key]);
+      if (this._headers[key]) {
+        return String(this._headers[key]);
       }
 
       return undefined;
     }
 
     setHeaders(headers: HttpHeaders): void {
-      this.headers = clear(headers);
+      this._headers = clear(headers);
     }
 
     setSuccessProcess(message?: string): void {
-      this.setStatusHeader(ResultCode.SUCCESS, message);
+      this._setStatusHeader(ResultCode.SUCCESS, message);
     }
 
     setStopProcess(status: ResultCode, message?: string): void {
-      ProcessDTO.validateStatus(status);
+      ProcessDTO._validateStatus(status);
 
-      this.setStatusHeader(status, message);
+      this._setStatusHeader(status, message);
     }
 
     setRepeater(interval: number, maxHops: number, repeatHops?: number, queue?: string, message?: string): void {
@@ -111,7 +111,7 @@ export default class ProcessDTO implements IProcessDTO {
         throw new Error('Value maxHops is obligatory and can not be lower than 0');
       }
 
-      this.setStatusHeader(ResultCode.REPEAT, message ?? 'Repeater applied.');
+      this._setStatusHeader(ResultCode.REPEAT, message ?? 'Repeater applied.');
 
       this.addHeader(createKey(REPEAT_INTERVAL), interval.toString());
       this.addHeader(createKey(REPEAT_MAX_HOPS), maxHops.toString());
@@ -126,7 +126,7 @@ export default class ProcessDTO implements IProcessDTO {
     }
 
     incrementRepeaterHop(): void {
-      const hop = getRepeatHops(this.headers) + 1;
+      const hop = getRepeatHops(this._headers) + 1;
       this.addHeader(createKey(REPEAT_HOPS), hop.toString());
     }
 
@@ -138,7 +138,7 @@ export default class ProcessDTO implements IProcessDTO {
     }
 
     setLimiter(key: string, time: number, amount: number): void {
-      const lk = util.format('%s;%s;%s', ProcessDTO.decorateLimitKey(key), time, amount);
+      const lk = util.format('%s;%s;%s', ProcessDTO._decorateLimitKey(key), time, amount);
       this.addHeader(createKey(LIMITER_KEY), lk);
     }
 
@@ -152,10 +152,10 @@ export default class ProcessDTO implements IProcessDTO {
     ): void {
       const lk = util.format(
         '%s;%s;%s;%s;%s;%s',
-        ProcessDTO.decorateLimitKey(key),
+        ProcessDTO._decorateLimitKey(key),
         time,
         amount,
-        ProcessDTO.decorateLimitKey(groupKey),
+        ProcessDTO._decorateLimitKey(groupKey),
         groupTime,
         groupAmount,
       );
@@ -166,14 +166,14 @@ export default class ProcessDTO implements IProcessDTO {
       this.removeHeader(createKey(LIMITER_KEY));
     }
 
-    private setStatusHeader(value: ResultCode, message?: string) {
+    private _setStatusHeader(value: ResultCode, message?: string) {
       if (message) {
         this.addHeader(createKey(RESULT_MESSAGE), message);
       }
       this.addHeader(createKey(RESULT_CODE), value.toString());
     }
 
-    private static decorateLimitKey(key: string): string {
+    private static _decorateLimitKey(key: string): string {
       let newKey = key;
       if (!key.includes('|')) {
         newKey = util.format('%s|', key);
@@ -182,7 +182,7 @@ export default class ProcessDTO implements IProcessDTO {
       return newKey;
     }
 
-    private static validateStatus(code: number): void {
+    private static _validateStatus(code: number): void {
       if (!ALLOWED_RESULT_CODES.includes(code)) {
         throw new Error('Value does not match with the required one');
       }

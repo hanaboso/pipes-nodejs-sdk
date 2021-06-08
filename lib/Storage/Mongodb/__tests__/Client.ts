@@ -5,6 +5,7 @@ import { storageOptions } from '../../../Config/Config';
 jest.mock('../../../Logger/Logger', () => ({
   error: () => jest.fn(),
   info: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Logger: jest.fn().mockImplementation(() => ({})),
 }));
 

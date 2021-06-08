@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/naming-convention */
 import * as os from 'os';
 import { Sender } from 'metrics-sender/dist/lib/udp/Sender';
 import { Request } from 'express';

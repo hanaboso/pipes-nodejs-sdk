@@ -48,7 +48,7 @@ export function get(key: string, headers: HttpHeaders): string | undefined {
 }
 
 export function clear(headers: HttpHeaders): HttpHeaders {
-  const res : HttpHeaders = {};
+  const res: HttpHeaders = {};
   Object.entries(headers).forEach(
     ([key, value]) => {
       if (WHITE_LIST.includes(key.toLowerCase()) || existPrefix(key.toLowerCase())) {
