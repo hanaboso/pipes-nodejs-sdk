@@ -8,11 +8,13 @@ test:
     stage: test
     script:
         - export COMPOSE_PROJECT_NAME="${CI_PIPELINE_ID}-pipes-nodejs-sdk"
-        - make test
+        - export COMPOSE_FILE="docker-compose.ci.yml"
+        - make docker-compose.ci.yml test
 
 cleanup:
     stage: cleanup
     when: always
     script:
         - export COMPOSE_PROJECT_NAME="${CI_PIPELINE_ID}-pipes-nodejs-sdk"
-        - make docker-down-clean
+        - export COMPOSE_FILE="docker-compose.ci.yml"
+        - make docker-compose.ci.yml docker-down-clean
