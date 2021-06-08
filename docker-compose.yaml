@@ -26,9 +26,13 @@ services:
 
     logstash:
         image: mendhak/udp-listener
+        ports:
+            - 0.0.0.0:4444:5005
 
     kapacitor:
         image: mendhak/udp-listener
+        ports:
+            - 0.0.0.0:5120:5005
 
 volumes:
     mongo: {}

@@ -1,4 +1,3 @@
-import { isPromise } from 'util/types';
 import {
   getCurrentMetrics,
   getTimes,
@@ -61,8 +60,8 @@ describe('Test metrics', () => {
     expect(typeof cpu.cpuStartTime).toEqual('number');
   });
 
-  it('sendCurlMetrics', () => {
-    const curlMetrics = sendCurlMetrics(
+  it('sendCurlMetrics', async () => {
+    const curlMetrics = await sendCurlMetrics(
       mockITimesMetrics,
       'randomNodeId',
       'randomCorrelationId',
@@ -70,17 +69,17 @@ describe('Test metrics', () => {
       'randomAppKey',
     );
     expect(curlMetrics).toBeDefined();
-    expect(isPromise(curlMetrics)).toBeTruthy();
+    expect(typeof curlMetrics === 'string').toBeTruthy();
   });
 
-  it('sendProcessMetrics', () => {
-    const processMetric = sendProcessMetrics(
+  it('sendProcessMetrics', async () => {
+    const processMetric = await sendProcessMetrics(
       mockITimesMetrics,
       'randomTopologyId',
       'randomNodeId',
       'randomCorrelationId',
     );
     expect(processMetric).toBeDefined();
-    expect(isPromise(processMetric)).toBeTruthy();
+    expect(typeof processMetric === 'string').toBeTruthy();
   });
 });

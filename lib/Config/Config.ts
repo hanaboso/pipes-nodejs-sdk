@@ -1,10 +1,10 @@
 export const loggerOptions = {
-  server: process.env.UDP_LOGGER_HOST || 'logstash',
+  server: process.env.UDP_LOGGER_HOST || 'localhost',
   port: parseInt(process.env.UDP_LOGGER_PORT || '5120', 10),
 };
 
 export const metricsOptions = {
-  server: process.env.METRICS_HOST || 'kapacitor',
+  server: process.env.METRICS_HOST || 'localhost',
   port: parseInt(process.env.METRICS_PORT || '4444', 10),
   curlMeasurement: process.env.CURL_METRICS_MEASUREMENT || 'monolith',
   processMeasurement: process.env.PROCESS_METRICS_MEASUREMENT || 'connectors',

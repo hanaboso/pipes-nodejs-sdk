@@ -20,7 +20,7 @@ export async function sendProcessMetrics(
   topologyId?: string,
   nodeId?: string,
   correlationId?: string,
-): Promise<void> {
+): Promise<string|void> {
   const tags: ITagsMap = {};
   if (topologyId) {
     tags.topology_id = topologyId;
@@ -39,9 +39,11 @@ export async function sendProcessMetrics(
   };
 
   try {
-    await new Metrics(metricsOptions.processMeasurement, tags, metricsOptions.server, metricsOptions.port).send(fields);
+    return await new Metrics(metricsOptions.processMeasurement, tags, metricsOptions.server, metricsOptions.port)
+      .send(fields);
   } catch (e) {
     logger.error(e);
+    return undefined;
   }
 }
 
@@ -51,7 +53,7 @@ export async function sendCurlMetrics(
   correlationId?: string,
   user?: string,
   appKey?: string,
-): Promise<void> {
+): Promise<string|void> {
   const tags: ITagsMap = {};
   if (user) {
     tags.user_id = user;
@@ -73,9 +75,11 @@ export async function sendCurlMetrics(
   };
 
   try {
-    await new Metrics(metricsOptions.curlMeasurement, tags, metricsOptions.server, metricsOptions.port).send(fields);
+    return await new Metrics(metricsOptions.curlMeasurement, tags, metricsOptions.server, metricsOptions.port)
+      .send(fields);
   } catch (e) {
     logger.error(e);
+    return undefined;
   }
 }
 
