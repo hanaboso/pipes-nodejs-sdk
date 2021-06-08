@@ -20,19 +20,19 @@ services:
     mongo:
         image: mongo:latest
         ports:
-        -   0.0.0.0:27017:27017
+            - ${DEV_IP}:27017:27017
         volumes:
-        -   mongo:/data/db
+            - mongo:/data/db
 
     logstash:
         image: mendhak/udp-listener
         ports:
-            - 0.0.0.0:4444:5005
+            - ${DEV_IP}:4444:5005
 
     kapacitor:
         image: mendhak/udp-listener
         ports:
-            - 0.0.0.0:5120:5005
+            - ${DEV_IP}:5120:5005
 
 volumes:
     mongo: {}
