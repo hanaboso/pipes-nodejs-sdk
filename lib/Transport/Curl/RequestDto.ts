@@ -4,63 +4,63 @@ import ProcessDTO from '../../Utils/ProcessDTO';
 import HttpMethods from '../HttpMethods';
 
 export default class RequestDto implements IRequestDto {
-    private timeout: number;
+    private _timeout: number;
 
     constructor(
-        private url: string,
-        private method: HttpMethods,
-        private debugInfo: ProcessDTO,
-        private body?: string,
-        private headers?: HeaderInit,
+        private _url: string,
+        private _method: HttpMethods,
+        private _debugInfo: ProcessDTO,
+        private _body?: string,
+        private _headers?: HeaderInit,
     ) {
-      this.timeout = 10000; // 10sec as a default timeout
+      this._timeout = 10000; // 10sec as a default timeout
     }
 
     getBody(): string | undefined {
-      return this.body;
+      return this._body;
     }
 
     getHeaders(): HeaderInit | undefined {
-      return this.headers;
+      return this._headers;
     }
 
     getMethod(): HttpMethods {
-      return this.method;
+      return this._method;
     }
 
     getUrl(): string {
-      return this.url;
+      return this._url;
     }
 
     setBody(body: string): void {
-      this.body = body;
+      this._body = body;
     }
 
     setHeaders(headers: HeaderInit): void {
-      this.headers = headers;
+      this._headers = headers;
     }
 
     setMethod(method: HttpMethods): void {
-      this.method = method;
+      this._method = method;
     }
 
     setUrl(url: string): void {
-      this.url = url;
+      this._url = url;
     }
 
     setTimeout(ms: number): void {
-      this.timeout = ms;
+      this._timeout = ms;
     }
 
     getTimeout(): number {
-      return this.timeout;
+      return this._timeout;
     }
 
     getDebugInfo(): ProcessDTO {
-      return this.debugInfo;
+      return this._debugInfo;
     }
 
     setDebugInfo(dto: ProcessDTO): void {
-      this.debugInfo = dto;
+      this._debugInfo = dto;
     }
 }

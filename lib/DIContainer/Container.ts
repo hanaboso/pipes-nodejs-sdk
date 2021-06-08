@@ -12,15 +12,15 @@ interface IContainer {
 }
 
 export default class DIContainer implements IContainer {
-    private services: Map<string, any>;
+    private _services: Map<string, any>;
 
     constructor() {
-      this.services = new Map<string, any>();
+      this._services = new Map<string, any>();
     }
 
     get(name: string): any {
       if (this.has(name)) {
-        return this.services.get(name);
+        return this._services.get(name);
       }
 
       throw new Error(`Service with name "${name}" does not exist!`);
@@ -28,7 +28,7 @@ export default class DIContainer implements IContainer {
 
     getAllByPrefix(prefix: string): Array<any> {
       const services: Array<any> = [];
-      this.services.forEach((value, key) => {
+      this._services.forEach((value, key) => {
         if (key.startsWith(prefix)) {
           services.push(value);
         }
@@ -38,13 +38,13 @@ export default class DIContainer implements IContainer {
     }
 
     has(name: string): boolean {
-      return this.services.has(name);
+      return this._services.has(name);
     }
 
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     set(name: string, service: any): void {
       if (!this.has(name)) {
-        this.services.set(name, service);
+        this._services.set(name, service);
       } else {
         throw new Error(`Service with name "${name}" already exist!`);
       }

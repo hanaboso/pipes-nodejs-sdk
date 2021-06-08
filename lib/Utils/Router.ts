@@ -7,12 +7,12 @@ import {
 import ResultCode from './ResultCode';
 import { appOptions } from '../Config/Config';
 
-interface ErrorResponse {
+interface IErrorResponse {
   result: string;
   message: string;
 }
 
-export function formatError(e: Error): ErrorResponse {
+export function formatError(e: Error): IErrorResponse {
   return { result: 'error', message: e.message };
 }
 

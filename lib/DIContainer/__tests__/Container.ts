@@ -6,6 +6,7 @@ import { CUSTOM_NODE_PREFIX } from '../../CustomNode/CustomNodeRouter';
 jest.mock('../../Logger/Logger', () => ({
   error: () => jest.fn(),
   debug: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Logger: jest.fn().mockImplementation(() => ({})),
 }));
 

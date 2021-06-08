@@ -5,10 +5,12 @@ import { ITimesMetrics, sendCurlMetrics, sendProcessMetrics } from '../Metrics';
 jest.mock('../../Logger/Logger', () => ({
   error: () => jest.fn(),
   debug: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Logger: jest.fn().mockImplementation(() => ({})),
 }));
 
 jest.mock('metrics-sender/dist/lib/metrics/Metrics', () => ({
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Metrics: jest.fn().mockImplementation(() => ({})),
 }));
 
