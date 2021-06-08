@@ -4,6 +4,7 @@ import { getCpuTimes, getCpuUsage, getCurrentTimestamp } from '../SystemUsage';
 jest.mock('../../Logger/Logger', () => ({
   error: () => jest.fn(),
   debug: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Logger: jest.fn().mockImplementation(() => ({})),
 }));
 

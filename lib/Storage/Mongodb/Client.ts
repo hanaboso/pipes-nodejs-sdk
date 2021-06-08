@@ -3,29 +3,29 @@ import { ClassType, Repository } from 'mongodb-typescript';
 import logger from '../../Logger/Logger';
 
 export default class MongoDbClient {
-  private readonly client: MongoClient
+  private readonly _client: MongoClient
 
-  private connectionPromise?: Promise<void> = undefined;
+  private _connectionPromise?: Promise<void> = undefined;
 
-  constructor(private dsn: string) {
-    this.client = new MongoClient(this.dsn, { useUnifiedTopology: true });
+  constructor(private _dsn: string) {
+    this._client = new MongoClient(this._dsn, { useUnifiedTopology: true });
     this.reconnect();
   }
 
   public async waitOnConnect(): Promise<void> {
-    await this.connectionPromise;
+    await this._connectionPromise;
   }
 
   public async down(): Promise<void> {
-    await this.client.close(true);
+    await this._client.close(true);
   }
 
   public isConnected(): boolean {
-    return this.client.isConnected();
+    return this._client.isConnected();
   }
 
   public reconnect(): void {
-    this.connectionPromise = this.client.connect()
+    this._connectionPromise = this._client.connect()
       .then(() => {
         logger.info('⚡️[server]: MongoDB Connected.');
       }).catch((err) => {
@@ -34,11 +34,11 @@ export default class MongoDbClient {
   }
 
   public getRepository(className: ClassType<unknown>, collection: string): Repository<unknown> {
-    if (!this.client.isConnected()) {
+    if (!this._client.isConnected()) {
       this.reconnect();
       this.waitOnConnect();
     }
 
-    return new Repository(className, this.client, collection);
+    return new Repository(className, this._client, collection);
   }
 }

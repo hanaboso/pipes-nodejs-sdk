@@ -24,7 +24,7 @@ function createInitFromDto(dto: RequestDto): RequestInit {
   };
 }
 
-async function log(req: RequestDto, res: Response, level: string, body?:string): Promise<void> {
+function log(req: RequestDto, res: Response, level: string, body?: string): void {
   let message = 'Request success.';
   if (res.status !== 200) {
     message = 'Request failed.';
@@ -64,14 +64,14 @@ async function send(dto: RequestDto): Promise<ResponseDto> {
       sendMetrics(dto, startTime);
       const body = await response.text();
       if (!response.ok) {
-        await log(dto, response, Severity.ERROR, body);
+        log(dto, response, Severity.ERROR, body);
       } else {
-        await log(dto, response, Severity.DEBUG, body);
+        log(dto, response, Severity.DEBUG, body);
       }
 
       return { response, body };
     },
-    (reason) => {
+    async (reason) => {
       sendMetrics(dto, startTime);
       logger.error(reason);
       return Promise.reject(reason);

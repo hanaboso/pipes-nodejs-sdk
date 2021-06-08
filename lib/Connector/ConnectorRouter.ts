@@ -7,16 +7,16 @@ import ProcessDTO from '../Utils/ProcessDTO';
 export const CONNECTOR_PREFIX = 'hbpf.connector';
 
 export default class ConnectorRouter extends CommonRouter {
-    private loader: CommonLoader;
+    private _loader: CommonLoader;
 
     constructor(app: express.Application, loader: CommonLoader) {
       super(app, 'ConnectorRouter');
-      this.loader = loader;
+      this._loader = loader;
     }
 
     configureRoutes(): express.Application {
       this.app.route('/connector/:name/action').post(async (req, res, next) => {
-        const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        const connector = this._loader.get(CONNECTOR_PREFIX, req.params.name);
         await connector
           .processAction(createProcessDTO(req))
           .then(
@@ -28,17 +28,17 @@ export default class ConnectorRouter extends CommonRouter {
       });
 
       this.app.route('/connector/:name/action/test').get((req, res) => {
-        this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        this._loader.get(CONNECTOR_PREFIX, req.params.name);
         res.json([]);
       });
 
       this.app.route('/connector/list').get((req, res) => {
-        res.json(this.loader.getList(CONNECTOR_PREFIX));
+        res.json(this._loader.getList(CONNECTOR_PREFIX));
       });
 
       // TODO: Deprecated
       this.app.route('/connector/:name/webhook').post(async (req, res, next) => {
-        const connector = this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        const connector = this._loader.get(CONNECTOR_PREFIX, req.params.name);
         await connector
           .processAction(createProcessDTO(req))
           .then((dto: ProcessDTO) => {
@@ -49,7 +49,7 @@ export default class ConnectorRouter extends CommonRouter {
 
       // TODO: Deprecated
       this.app.route('/connector/:name/webhook/test').get((req, res) => {
-        this.loader.get(CONNECTOR_PREFIX, req.params.name);
+        this._loader.get(CONNECTOR_PREFIX, req.params.name);
         res.json([]);
       });
 

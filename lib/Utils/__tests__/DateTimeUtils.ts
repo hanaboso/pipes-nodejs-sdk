@@ -1,4 +1,4 @@
-import DateTimeUtils from '../DateTimeUtils';
+import DateTimeUtils, { DATE_TIME } from '../DateTimeUtils';
 
 describe('DateTimeUtils tests', () => {
   it('utcDate', () => {
@@ -8,8 +8,8 @@ describe('DateTimeUtils tests', () => {
   });
   it('getFormatedDate', () => {
     const date = new Date(2021, 5, 4, 10, 30, 15);
-    const formated = DateTimeUtils.getFormatedDate(date, DateTimeUtils.DATE_TIME);
-    expect(formated).toBeDefined();
-    expect(formated).toEqual('2021-06-04 10:30:15');
+    const formatted = DateTimeUtils.getFormattedDate(date, DATE_TIME);
+    expect(formatted).toBeDefined();
+    expect(formatted).toEqual('2021-06-04 10:30:15');
   });
 });

@@ -13,6 +13,7 @@ import { ICpuTimes } from '../../Utils/SystemUsage';
 jest.mock('../../Logger/Logger', () => ({
   error: () => jest.fn(),
   debug: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   Logger: jest.fn().mockImplementation(() => ({})),
 }));
 
