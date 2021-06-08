@@ -10,6 +10,10 @@ export const metricsOptions = {
   processMeasurement: process.env.PROCESS_METRICS_MEASUREMENT || 'connectors',
 };
 
+export const storageOptions = {
+  dsn: process.env.MONGO_DSN || 'mongodb://localhost:27017',
+};
+
 export const appOptions = {
   port: parseInt(process.env.APP_PORT || '8080', 10),
   debug: (process.env.APP_DEBUG === 'debug'),
