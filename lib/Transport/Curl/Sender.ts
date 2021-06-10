@@ -3,15 +3,10 @@ import RequestDto from './RequestDto';
 import logger, { Logger } from '../../Logger/Logger';
 import ResponseDto from './ResponseDto';
 import {
-  getCurrentMetrics,
-  getTimes,
-  IStartMetrics,
-  sendCurlMetrics,
+  getCurrentMetrics, getTimes, IStartMetrics, sendCurlMetrics,
 } from '../../Metrics/Metrics';
 import {
-  APPLICATION,
-  CORRELATION_ID,
-  NODE_ID, USER,
+  APPLICATION, CORRELATION_ID, NODE_ID, USER,
 } from '../../Utils/Headers';
 import Severity from '../../Logger/Severity';
 
@@ -30,30 +25,32 @@ function log(req: RequestDto, res: Response, level: string, body?: string): void
     message = 'Request failed.';
   }
 
+  const debugInfo = req.getDebugInfo();
   logger.log(
     level,
     `${message}
        Code: ${res.status},
        Message: ${body ?? 'Empty response'},
        Reason: ${res.statusText}`,
-    Logger.ctxFromDto(req.getDebugInfo()),
+    debugInfo ? Logger.ctxFromDto(debugInfo) : undefined,
   );
 }
 
 function sendMetrics(dto: RequestDto, startTimes: IStartMetrics): void {
   const info = dto.getDebugInfo();
-  const times = getTimes(startTimes);
-
   try {
-    sendCurlMetrics(
-      times,
-      info.getHeader(NODE_ID),
-      info.getHeader(CORRELATION_ID),
-      info.getHeader(USER),
-      info.getHeader(APPLICATION),
-    );
+    if (info) {
+      const times = getTimes(startTimes);
+      sendCurlMetrics(
+        times,
+        info.getHeader(NODE_ID),
+        info.getHeader(CORRELATION_ID),
+        info.getHeader(USER),
+        info.getHeader(APPLICATION),
+      );
+    }
   } catch (e) {
-    logger.error(e, Logger.ctxFromDto(info));
+    logger.error(e, info ? Logger.ctxFromDto(info) : undefined);
   }
 }
 

@@ -15,5 +15,5 @@ export interface IRequestDto {
     getBody(): string|undefined;
     getHeaders(): HeaderInit|undefined;
     getTimeout(): number;
-    getDebugInfo(): ProcessDTO;
+    getDebugInfo(): ProcessDTO|undefined;
 }
