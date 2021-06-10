@@ -7,6 +7,11 @@ import {ApplicationInstall} from "../../lib/Application/Database/ApplicationInst
 import Field from "../../lib/Application/Model/Form/Field";
 
 export default class TestBasicApplication extends BasicApplicationAbstract {
+
+    syncTestSyncMethod(): void {
+        //Test function for Annotation test
+    }
+
     getDescription(): string {
         return "Test description";
     }
