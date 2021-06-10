@@ -9,9 +9,9 @@ export default class RequestDto implements IRequestDto {
     constructor(
         private _url: string,
         private _method: HttpMethods,
-        private _debugInfo: ProcessDTO,
         private _body?: string,
         private _headers?: HeaderInit,
+        private _debugInfo?: ProcessDTO,
     ) {
       this._timeout = 10000; // 10sec as a default timeout
     }
@@ -56,7 +56,7 @@ export default class RequestDto implements IRequestDto {
       return this._timeout;
     }
 
-    getDebugInfo(): ProcessDTO {
+    getDebugInfo(): ProcessDTO | undefined {
       return this._debugInfo;
     }
 
