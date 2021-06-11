@@ -9,7 +9,7 @@ export interface IFieldArray {
     required: boolean;
     readOnly: boolean;
     disabled: boolean;
-    choices: Array<unknown>;
+    choices: unknown[];
 }
 
 export default class Field {
@@ -19,7 +19,7 @@ export default class Field {
 
     private _disabled = false;
 
-    private _choices: Array<unknown> = [];
+    private _choices: unknown[] = [];
 
     // eslint-disable-next-line no-useless-constructor
     public constructor(
@@ -51,7 +51,7 @@ export default class Field {
       return this._description;
     }
 
-    public get choices(): Array<unknown> {
+    public get choices(): unknown[] {
       return this._choices;
     }
 
@@ -111,7 +111,7 @@ export default class Field {
       return this;
     }
 
-    public setChoices(choices: Array<unknown>): Field {
+    public setChoices(choices: unknown[]): Field {
       this._choices = choices;
       return this;
     }

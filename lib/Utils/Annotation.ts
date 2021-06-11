@@ -1,7 +1,7 @@
 export default class Annotation {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-module-boundary-types
-    public static getAllMethods = (inputInstance: any): Array<string> => {
-      let props: Array<string> = [];
+    public static getAllMethods = (inputInstance: any): string[] => {
+      let props: string[] = [];
       let obj = inputInstance;
       do {
         const inLoopObj = obj;
@@ -25,8 +25,8 @@ export default class Annotation {
       return props;
     }
 
-    private static _formatSyncMethodName = (input: Array<string>): Array<string> => {
-      const formattedInput: Array<string> = [];
+    private static _formatSyncMethodName = (input: string[]): string[] => {
+      const formattedInput: string[] = [];
       input.forEach((method) => {
         if (method.length > 4) {
           formattedInput.push(method.substr(4).charAt(0).toLowerCase() + method.slice(5));

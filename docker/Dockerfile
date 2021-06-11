@@ -1,6 +1,6 @@
-FROM node:alpine3.12
+FROM node:slim
 
-RUN apk update && apk update && apk add --no-cache \
+RUN apt-get update && apt-get update && apt-get install -y \
     yarn
 
 RUN yarn set version berry
