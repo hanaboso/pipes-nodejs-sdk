@@ -1,21 +1,21 @@
 import DIContainer from '../DIContainer/Container';
-import { ICommonNode } from './ICommonNode';
+import { IName } from './IName';
 
 export default class CommonLoader {
   // eslint-disable-next-line no-useless-constructor
   constructor(private _container: DIContainer) {
   }
 
-  public get(prefix: string, name: string): ICommonNode {
+  public get(prefix: string, name: string): IName {
     return this._container.get(`${prefix}.${name}`);
   }
 
   public getList(prefix: string): string[] {
-    const connectors: string[] = [];
-    this._container.getAllByPrefix(prefix).forEach((node: ICommonNode) => {
-      connectors.push(node.getName());
+    const list: string[] = [];
+    this._container.getAllByPrefix(prefix).forEach((obj: IName) => {
+      list.push(obj.getName());
     });
 
-    return connectors;
+    return list;
   }
 }

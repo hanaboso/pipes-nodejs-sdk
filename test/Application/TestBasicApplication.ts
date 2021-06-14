@@ -8,20 +8,23 @@ import Field from "../../lib/Application/Model/Form/Field";
 
 export default class TestBasicApplication extends BasicApplicationAbstract {
 
-    syncTestSyncMethod(): void {
-        //Test function for Annotation test
+    syncTestSyncMethod(): string {
+        return JSON.stringify({
+            param1: 'p1',
+            param2: 'p2',
+        })
     }
 
     getDescription(): string {
         return "Test description";
     }
 
-    getKey(): string {
+    getName(): string {
         return "test";
     }
 
-    getName(): string {
-        return "Test";
+    getPublicName(): string {
+        return "Test application";
     }
 
     getSettingsForm(): Form {

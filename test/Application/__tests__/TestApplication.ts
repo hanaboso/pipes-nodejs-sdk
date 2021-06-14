@@ -14,13 +14,13 @@ describe('Test application', () => {
         const app = new TestBasicApplication();
         expect(app.getDescription()).toEqual('Test description');
     });
-    it('getKey', function () {
+    it('getPublicName', function () {
         const app = new TestBasicApplication();
-        expect(app.getKey()).toEqual('test');
+        expect(app.getPublicName()).toEqual('Test application');
     });
     it('getName', function () {
         const app = new TestBasicApplication();
-        expect(app.getName()).toEqual('Test');
+        expect(app.getName()).toEqual('test');
     });
     it('toArray', function () {
         const app = new TestBasicApplication();
@@ -29,7 +29,7 @@ describe('Test application', () => {
             'authorization_type': AuthorizationTypeEnum.BASIC,
             'description': 'Test description',
             'key': 'test',
-            'name': 'Test',
+            'name': 'Test application',
         });
     });
     it('getSettingsForm', function () {

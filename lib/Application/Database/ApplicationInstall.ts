@@ -1,3 +1,4 @@
+import { id } from 'mongodb-typescript';
 import DateTimeUtils, { DATE_TIME } from '../../Utils/DateTimeUtils';
 
 export interface IApplicationSettings {
@@ -17,6 +18,7 @@ export interface IApplicationInstallArray {
 }
 
 export class ApplicationInstall {
+    @id
     private _id = '';
 
     private _deleted = false;
@@ -118,5 +120,9 @@ export class ApplicationInstall {
     addNonEncryptedSettings(nonEncryptedSettings: IApplicationSettings): ApplicationInstall {
       this._nonEncryptedSettings = { ...this._nonEncryptedSettings, ...nonEncryptedSettings };
       return this;
+    }
+
+    public static getCollection(): string {
+      return 'ApplicationInstall';
     }
 }

@@ -1,13 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CONNECTOR_PREFIX } from '../Connector/ConnectorRouter';
 import { CUSTOM_NODE_PREFIX } from '../CustomNode/CustomNodeRouter';
+import { IApplication } from '../Application/Base/IApplication';
+import { ICommonNode } from '../Commons/ICommonNode';
+import { APPLICATION_PREFIX } from '../Application/ApplicationRouter';
 
 interface IContainer {
     get(name: string): any;
     getAllByPrefix(prefix: string): any[];
     set(name: string, service: any): void;
+
     setConnector(name: string, service: any): void;
+
     setCustomNode(name: string, service: any): void;
+
     has(name: string): boolean;
 }
 
@@ -50,13 +56,15 @@ export default class DIContainer implements IContainer {
       }
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    setConnector(name: string, service: any) {
+    setConnector(name: string, service: ICommonNode): void {
       this.set(`${CONNECTOR_PREFIX}.${name}`, service);
     }
 
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    setCustomNode(name: string, service: any) {
+    setCustomNode(name: string, service: ICommonNode): void {
       this.set(`${CUSTOM_NODE_PREFIX}.${name}`, service);
+    }
+
+    setApplication(name: string, service: IApplication): void {
+      this.set(`${APPLICATION_PREFIX}.${name}`, service);
     }
 }

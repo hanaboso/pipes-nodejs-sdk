@@ -1,6 +1,7 @@
 import DIContainer from '../Container';
 import { CONNECTOR_PREFIX } from '../../Connector/ConnectorRouter';
 import { CUSTOM_NODE_PREFIX } from '../../CustomNode/CustomNodeRouter';
+import TestConnector from '../../../test/Connector/TestConnector';
 
 // Mock Logger module
 jest.mock('../../Logger/Logger', () => ({
@@ -11,6 +12,7 @@ jest.mock('../../Logger/Logger', () => ({
 }));
 
 const container = new DIContainer();
+const testConnector = new TestConnector();
 
 describe('Test DIContainer', () => {
   it('test set/has service', () => {
@@ -51,23 +53,23 @@ describe('Test DIContainer', () => {
 
   it('test set/get Connector service', () => {
     const serviceName = 'testService4';
-    container.setConnector(serviceName, 'fake-service');
+    container.setConnector(serviceName, testConnector);
 
-    expect(container.get(`${CONNECTOR_PREFIX}.${serviceName}`)).toEqual('fake-service');
+    expect(container.get(`${CONNECTOR_PREFIX}.${serviceName}`)).toEqual(testConnector);
   });
 
   it('test set/get CustomNode service', () => {
     const serviceName = 'testService5';
-    container.setCustomNode(serviceName, 'fake-service');
+    container.setCustomNode(serviceName, testConnector);
 
-    expect(container.get(`${CUSTOM_NODE_PREFIX}.${serviceName}`)).toEqual('fake-service');
+    expect(container.get(`${CUSTOM_NODE_PREFIX}.${serviceName}`)).toEqual(testConnector);
   });
 
   it('test set/getAllByPrefix services', () => {
     const container2 = new DIContainer();
-    container2.setConnector('testService6', 'fake-service');
-    container2.setConnector('testService7', 'fake-service');
+    container2.setConnector('testService6', testConnector);
+    container2.setConnector('testService7', testConnector);
 
-    expect(container2.getAllByPrefix(CUSTOM_NODE_PREFIX)).toEqual(['fake-service', 'fake-service']);
+    expect(container2.getAllByPrefix(CUSTOM_NODE_PREFIX)).toEqual([testConnector, testConnector]);
   });
 });

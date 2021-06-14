@@ -9,6 +9,7 @@ import { IFieldArray } from '../Model/Form/Field';
 
 export const FORM = 'form';
 export const AUTHORIZATION_SETTINGS = 'authorization_settings';
+export const REDIRECT_URL = 'redirect_url';
 
 export interface IApplicationArray {
     name: string;
@@ -23,7 +24,7 @@ export interface IApplicationArray {
 export default abstract class ApplicationAbstract implements IApplication {
     public abstract getAuthorizationType(): AuthorizationTypeEnum;
 
-    public abstract getKey(): string;
+    public abstract getPublicName(): string;
 
     public abstract getName(): string;
 
@@ -76,12 +77,12 @@ export default abstract class ApplicationAbstract implements IApplication {
 
     public toArray(): IApplicationArray {
       return {
-        name: this.getName(),
+        name: this.getPublicName(),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         authorization_type: this.getAuthorizationType(),
         // eslint-disable-next-line @typescript-eslint/naming-convention
         application_type: this.getApplicationType(),
-        key: this.getKey(),
+        key: this.getName(),
         description: this.getDescription(),
       };
     }
