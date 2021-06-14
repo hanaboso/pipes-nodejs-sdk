@@ -9,7 +9,7 @@ import { appOptions } from '../Config/Config';
 import errorHandler from '../Middleware/ErrorHandler';
 import metricsHandler from '../Middleware/MetricsHandler';
 
-export const routes: Array<CommonRouter> = [];
+export const routes: CommonRouter[] = [];
 
 const sdk: express.Application = express();
 
