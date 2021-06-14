@@ -1048,6 +1048,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/sodium-native@npm:^2.3.5":
+  version: 2.3.5
+  resolution: "@types/sodium-native@npm:2.3.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: c56f01069e0097437b5154abd5b9a06f3af6996a8e801af14e6c62d4b2e3dce6355eab2dd4630e364592cd37a987dfc39c6bceb1a8031d39889a8bba7656ca24
+  languageName: node
+  linkType: hard
+
 "@types/stack-utils@npm:^2.0.0":
   version: 2.0.0
   resolution: "@types/stack-utils@npm:2.0.0"
@@ -3718,7 +3727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ini@npm:~1.3.0":
+"ini@npm:^1.3.5, ini@npm:~1.3.0":
   version: 1.3.8
   resolution: "ini@npm:1.3.8"
   checksum: 62189ce7ea44c5778e757e4232c581212e838f3c39e79d931bb9152fd4b9275f09fb20b96afdd60ba9f5d7996b92486cad6cc617fcb84ff4beedd1b33b86221e
@@ -5188,6 +5197,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-gyp-build@npm:^4.2.0":
+  version: 4.2.3
+  resolution: "node-gyp-build@npm:4.2.3"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 8512c25498b1605dbe9d2605cac7f8996d18c35097b3079b232674b0f3b8f1559be6f531ec3a00a94f90a0a69ccc452edb62f8f6dfff8caa3abe4b729cc21b06
+  languageName: node
+  linkType: hard
+
 "node-gyp@npm:latest":
   version: 8.0.0
   resolution: "node-gyp@npm:8.0.0"
@@ -5674,6 +5694,7 @@ __metadata:
     "@types/mongodb": ^3.6.17
     "@types/node": ^15.12.2
     "@types/node-fetch": ^2.5.10
+    "@types/sodium-native": ^2.3.5
     "@types/supertest": ^2.0.11
     "@typescript-eslint/eslint-plugin": ^4.26.1
     "@typescript-eslint/parser": ^4.26.1
@@ -5691,6 +5712,7 @@ __metadata:
     node-fetch: ^2.6.1
     nodemon: ^2.0.7
     reflect-metadata: ^0.1.13
+    sodium-native: ^3.2.1
     supertest: ^6.1.3
     ts-jest: ^27.0.3
     ts-node: ^10.0.0
@@ -6360,6 +6382,17 @@ __metadata:
     ip: ^1.1.5
     smart-buffer: ^4.1.0
   checksum: 9a5735cf9be6f756006b4c5ed23f17c15ffbfc0afb04b5d1b49516b7a27818c807a6a5b5419a65a140a1964149ec9ebb6cd8f0e06d7c60282912204d781371db
+  languageName: node
+  linkType: hard
+
+"sodium-native@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "sodium-native@npm:3.2.1"
+  dependencies:
+    ini: ^1.3.5
+    node-gyp: latest
+    node-gyp-build: ^4.2.0
+  checksum: 38f215fe645ec2030fa67a92a1a00a4f9f15acd758d4d1985022e9549b2de42aedf981f87a1a50e3940874b407a1b25430938a539982b4ea50820e648e8c1a32
   languageName: node
   linkType: hard
 

@@ -10,8 +10,8 @@ export default class CommonLoader {
     return this._container.get(`${prefix}.${name}`);
   }
 
-  public getList(prefix: string): Array<string> {
-    const connectors: Array<string> = [];
+  public getList(prefix: string): string[] {
+    const connectors: string[] = [];
     this._container.getAllByPrefix(prefix).forEach((node: ICommonNode) => {
       connectors.push(node.getName());
     });

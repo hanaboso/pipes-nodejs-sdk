@@ -4,7 +4,7 @@ import { CUSTOM_NODE_PREFIX } from '../CustomNode/CustomNodeRouter';
 
 interface IContainer {
     get(name: string): any;
-    getAllByPrefix(prefix: string): Array<any>;
+    getAllByPrefix(prefix: string): any[];
     set(name: string, service: any): void;
     setConnector(name: string, service: any): void;
     setCustomNode(name: string, service: any): void;
@@ -26,8 +26,8 @@ export default class DIContainer implements IContainer {
       throw new Error(`Service with name "${name}" does not exist!`);
     }
 
-    getAllByPrefix(prefix: string): Array<any> {
-      const services: Array<any> = [];
+    getAllByPrefix(prefix: string): any[] {
+      const services: any[] = [];
       this._services.forEach((value, key) => {
         if (key.startsWith(prefix)) {
           services.push(value);
