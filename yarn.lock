@@ -974,13 +974,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.6.17":
-  version: 3.6.17
-  resolution: "@types/mongodb@npm:3.6.17"
+"@types/mongodb@npm:^3.6.18":
+  version: 3.6.18
+  resolution: "@types/mongodb@npm:3.6.18"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
-  checksum: c96504ab4b3a07d1bee2a9614c55ec12a035d4564999fb3f6bfdf61ccc71c24bcbaa2af2ae177de44a7b4987397794f51e067533de45db5e995aadc2a3764af8
+  checksum: 6828e73bf8e98f261898a5b1e48d43873216f21726ec6a2b9a381e5413082ad4886e4581fe2c48fc61c6bd0f7dd8c7f1855d5b38493cdba402711958a3ba64b9
   languageName: node
   linkType: hard
 
@@ -5691,7 +5691,7 @@ __metadata:
     "@types/dateformat": ^3.0.1
     "@types/express": ^4.17.12
     "@types/jest": ^26.0.23
-    "@types/mongodb": ^3.6.17
+    "@types/mongodb": ^3.6.18
     "@types/node": ^15.12.2
     "@types/node-fetch": ^2.5.10
     "@types/sodium-native": ^2.3.5

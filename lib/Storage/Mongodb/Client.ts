@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { ClassType, Repository } from 'mongodb-typescript';
 import logger from '../../Logger/Logger';
+import { IDocument } from './DocumentAbstract';
 
 export default class MongoDbClient {
   private readonly _client: MongoClient
@@ -33,12 +34,12 @@ export default class MongoDbClient {
       });
   }
 
-  public getRepository(className: ClassType<unknown>, collection: string): Repository<unknown> {
+  public getRepository(className: ClassType<IDocument>): Repository<unknown> {
     if (!this._client.isConnected()) {
       this.reconnect();
       this.waitOnConnect();
     }
 
-    return new Repository(className, this._client, collection);
+    return new Repository(className, this._client, (className as unknown as IDocument).collection);
   }
 }

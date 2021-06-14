@@ -9,7 +9,6 @@ import { IFieldArray } from '../Model/Form/Field';
 
 export const FORM = 'form';
 export const AUTHORIZATION_SETTINGS = 'authorization_settings';
-export const REDIRECT_URL = 'redirect_url';
 
 export interface IApplicationArray {
     name: string;
@@ -44,7 +43,7 @@ export default abstract class ApplicationAbstract implements IApplication {
     ): RequestDto;
 
     public getApplicationForm(applicationInstall: ApplicationInstall): IFieldArray[] {
-      const settings = applicationInstall.settings[FORM] ?? [];
+      const settings = applicationInstall.getSettings()[FORM] ?? [];
       const form = this.getSettingsForm();
       form.fields.forEach((field) => {
         if (Object.prototype.hasOwnProperty.call(settings, field.type)) {

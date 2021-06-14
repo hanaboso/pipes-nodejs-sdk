@@ -2,12 +2,8 @@ import { ICrypt, NAME } from './ICrypt';
 
 export const PREFIX_LENGTH = 4;
 
-interface ICryptProviders {
-  [key: string]: ICrypt
-}
-
 export default class CryptManager {
-  private _providers: ICryptProviders = {}
+  private _providers: {[key: string]: ICrypt} = {};
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(providers: any[] = []) {

@@ -7,7 +7,6 @@ import { IApplication } from '../Base/IApplication';
 import { APPLICATION_PREFIX } from '../ApplicationRouter';
 import HttpMethods from '../../Transport/HttpMethods';
 import { IBasicApplication } from '../../Authorization/Type/Basic/IBasicApplication';
-import { REDIRECT_URL } from '../Base/ApplicationAbstract';
 import MongoDbClient from '../../Storage/Mongodb/Client';
 import { IOAuth2Application } from '../../Authorization/Type/OAuth2/IOAuth2Application';
 
@@ -18,9 +17,8 @@ export default class ApplicationManager {
         private _client: MongoDbClient,
         private _loader: CommonLoader,
     ) {
-      this._client.getRepository(ApplicationInstall, ApplicationInstall.getCollection());
-      this._repository = this._client.getRepository(ApplicationInstall, ApplicationInstall.getCollection()) as
-            Repository<ApplicationInstall>;
+      this._client.getRepository(ApplicationInstall);
+      this._repository = this._client.getRepository(ApplicationInstall) as Repository<ApplicationInstall>;
     }
 
     public get applications(): string[] {
@@ -55,39 +53,44 @@ export default class ApplicationManager {
       data: IApplicationSettings,
     ): Promise<ApplicationInstall> {
       const app = this.getApplication(key);
-      // TODO
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const appInstall = await this._repository.findOne({ _id: 1 });
+      const appInstall = await this._loadApplicationInstall(key, user);
+
       return app.setApplicationSettings(appInstall as ApplicationInstall, data);
     }
 
-    public saveApplicationPassword(key: string, user: string, password: string): ApplicationInstall {
+    public async saveApplicationPassword(key: string, user: string, password: string): Promise<ApplicationInstall> {
       const app = this.getApplication(key) as IBasicApplication;
-      // TODO
-      const appInstall = this._repository.findOne() as unknown as ApplicationInstall;
+      const appInstall = await this._loadApplicationInstall(key, user);
 
       return app.setApplicationPassword(appInstall, password);
     }
 
-    public authorizationApplication(key: string, user: string, redirectUrl: string): string {
+    public async authorizationApplication(key: string, user: string, redirectUrl: string): Promise<string> {
       const app = this.getApplication(key) as IOAuth2Application;
-
-      // TODO
-      const appInstall = this._repository.findOne() as unknown as ApplicationInstall;
+      const appInstall = await this._loadApplicationInstall(key, user);
 
       app.setFrontendRedirectUrl(appInstall, redirectUrl);
 
       return app.authorize(appInstall);
     }
 
-    public saveAuthorizationToken(key: string, user: string, token: string): unknown {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    public async saveAuthorizationToken(key: string, user: string, token: string): Promise<{ redirect_url: string}> {
       const app = this.getApplication(key) as IOAuth2Application;
-
-      // TODO
-      const appInstall = this._repository.findOne() as unknown as ApplicationInstall;
+      const appInstall = await this._loadApplicationInstall(key, user);
 
       app.setAuthorizationToken(appInstall, token);
 
-      return { [REDIRECT_URL]: app.getFrontendRedirectUrl(appInstall) };
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      return { redirect_url: app.getFrontendRedirectUrl(appInstall) };
+    }
+
+    private async _loadApplicationInstall(key: string, user: string): Promise<ApplicationInstall> {
+      const appInstall = await this._repository.findOne({ user, key });
+      if (appInstall === null) {
+        throw Error(`Application [${key}] has not found.`);
+      }
+
+      return appInstall;
     }
 }

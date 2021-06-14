@@ -5,9 +5,19 @@ import { storageOptions } from '../../../Config/Config';
 import DIContainer from '../../../DIContainer/Container';
 import CommonLoader from '../../../Commons/CommonLoader';
 import TestBasicApplication from '../../../../test/Application/TestBasicApplication';
-import { IApplicationSettings } from '../../Database/ApplicationInstall';
+import { ApplicationInstall } from '../../Database/ApplicationInstall';
 
 let appManager: ApplicationManager;
+let dbClient: MongoDbClient;
+let appInstall: ApplicationInstall;
+
+// Mock Logger module
+jest.mock('../../../Logger/Logger', () => ({
+  error: () => jest.fn(),
+  debug: () => jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  Logger: jest.fn().mockImplementation(() => ({})),
+}));
 
 describe('ApplicationManager tests', () => {
   // Mock Request/Response of Express
@@ -20,13 +30,23 @@ describe('ApplicationManager tests', () => {
     return mockedRequest() as unknown as Request;
   }
 
-  beforeEach(() => {
-    const dbClient = new MongoDbClient(storageOptions.dsn);
+  beforeEach(async () => {
+    dbClient = new MongoDbClient(storageOptions.dsn);
     const container = new DIContainer();
     const app = new TestBasicApplication();
     container.setApplication(app.getName(), app);
     const loader = new CommonLoader(container);
     appManager = new ApplicationManager(dbClient, loader);
+
+    appInstall = new ApplicationInstall();
+    appInstall.setUser('user').setKey('test');
+
+    await dbClient.getRepository(ApplicationInstall).insert(appInstall);
+  });
+
+  afterEach(() => {
+    dbClient.getRepository(ApplicationInstall).remove(appInstall);
+    dbClient.down();
   });
 
   it('applications', () => {
@@ -42,20 +62,29 @@ describe('ApplicationManager tests', () => {
     expect(appManager.runSynchronousAction('test', 'testSyncMethod',
       mockRequest())).toEqual('{"param1":"p1","param2":"p2"}');
   });
-  xit('saveApplicationSettings', () => {
-    const appSettings: IApplicationSettings = {
+  it('saveApplicationSettings', async () => {
+    const appSettings = {
       param1: 'p1',
     };
-    // TODO check return value
-    expect(appManager.saveApplicationSettings('test', 'hokus', appSettings)).toEqual('');
+    const dbInstall = await appManager.saveApplicationSettings('test', 'user', appSettings);
+
+    expect(dbInstall.getId() !== '').toBeTruthy();
+    expect(dbInstall.getSettings()).toEqual({});
   });
-  xit('saveApplicationPassword', () => {
-    expect(appManager.saveApplicationPassword('test', 'hokus', 'passs')).toEqual('');
+  it('saveApplicationPassword', async () => {
+    const dbInstall = await appManager.saveApplicationPassword('test', 'user', 'passs');
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    expect(dbInstall.getSettings()).toEqual({ authorization_settings: { password: 'passs' } });
   });
-  xit('authorizationApplication', () => {
-    expect(appManager.authorizationApplication('test', 'hokus', 'http://testRedirect.com')).toEqual('');
+  xit('authorizationApplication', async () => {
+    // TODO: otestovat na OAuth2 Applikaci
+    const dbInstall = await appManager.authorizationApplication('test', 'user', 'http://testRedirect.com');
+    expect(dbInstall).toEqual('');
   });
-  xit('saveAuthorizationToken', () => {
-    expect(appManager.saveAuthorizationToken('test', 'hokus', 'testToken')).toEqual('');
+  xit('saveAuthorizationToken', async () => {
+    // TODO: otestovat na OAuth2 Applikaci
+    const dbInstall = await appManager.saveAuthorizationToken('test', 'user', 'testToken');
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    expect(dbInstall).toEqual({ redirect_url: 'aa' });
   });
 });
