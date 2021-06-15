@@ -3,6 +3,7 @@ import CommonRouter from '../Commons/CommonRouter';
 import { createProcessDTO, createSuccessResponse } from '../Utils/Router';
 import CommonLoader from '../Commons/CommonLoader';
 import ProcessDTO from '../Utils/ProcessDTO';
+import { ICommonNode } from '../Commons/ICommonNode';
 
 export const CONNECTOR_PREFIX = 'hbpf.connector';
 
@@ -16,7 +17,7 @@ export default class ConnectorRouter extends CommonRouter {
 
     configureRoutes(): express.Application {
       this.app.route('/connector/:name/action').post(async (req, res, next) => {
-        const connector = this._loader.get(CONNECTOR_PREFIX, req.params.name);
+        const connector = this._loader.get(CONNECTOR_PREFIX, req.params.name) as ICommonNode;
         await connector
           .processAction(createProcessDTO(req))
           .then(
@@ -38,7 +39,7 @@ export default class ConnectorRouter extends CommonRouter {
 
       // TODO: Deprecated
       this.app.route('/connector/:name/webhook').post(async (req, res, next) => {
-        const connector = this._loader.get(CONNECTOR_PREFIX, req.params.name);
+        const connector = this._loader.get(CONNECTOR_PREFIX, req.params.name) as ICommonNode;
         await connector
           .processAction(createProcessDTO(req))
           .then((dto: ProcessDTO) => {

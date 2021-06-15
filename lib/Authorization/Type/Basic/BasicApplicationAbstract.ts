@@ -11,26 +11,26 @@ export abstract class BasicApplicationAbstract extends ApplicationAbstract imple
     public getAuthorizationType = (): AuthorizationTypeEnum => AuthorizationTypeEnum.BASIC
 
     public isAuthorized = (applicationInstall: ApplicationInstall): boolean => {
-      const appInstall = applicationInstall.settings[AUTHORIZATION_SETTINGS];
+      const appInstall = applicationInstall.getSettings()[AUTHORIZATION_SETTINGS];
       return ((!!appInstall[USER] && !!appInstall[PASSWORD]) || !!appInstall[TOKEN]);
     }
 
     public setApplicationUser(applicationInstall: ApplicationInstall, user: string): ApplicationInstall {
-      const { settings } = this._createAuthSettings(applicationInstall);
+      const settings = this._createAuthSettings(applicationInstall).getSettings();
 
       settings[AUTHORIZATION_SETTINGS][USER] = user;
       return applicationInstall.addSettings(settings);
     }
 
     public setApplicationPassword(applicationInstall: ApplicationInstall, password: string): ApplicationInstall {
-      const { settings } = this._createAuthSettings(applicationInstall);
+      const settings = this._createAuthSettings(applicationInstall).getSettings();
       settings[AUTHORIZATION_SETTINGS][PASSWORD] = password;
 
       return applicationInstall.addSettings(settings);
     }
 
     public setApplicationToken(applicationInstall: ApplicationInstall, token: string): ApplicationInstall {
-      const { settings } = this._createAuthSettings(applicationInstall);
+      const settings = this._createAuthSettings(applicationInstall).getSettings();
 
       settings[AUTHORIZATION_SETTINGS][TOKEN] = token;
       return applicationInstall.addSettings(settings);
@@ -57,7 +57,7 @@ export abstract class BasicApplicationAbstract extends ApplicationAbstract imple
     }
 
     private _createAuthSettings = (applicationInstall: ApplicationInstall): ApplicationInstall => {
-      if (!Object.prototype.hasOwnProperty.call(applicationInstall.settings, AUTHORIZATION_SETTINGS)) {
+      if (!Object.prototype.hasOwnProperty.call(applicationInstall.getSettings(), AUTHORIZATION_SETTINGS)) {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         applicationInstall.addSettings({ authorization_settings: {} });
         return applicationInstall;
