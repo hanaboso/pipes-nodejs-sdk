@@ -5,7 +5,7 @@ import DocumentAbstract from '../../Storage/Mongodb/DocumentAbstract';
 
 export interface IApplicationSettings {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-[key: string]: any
+  [key: string]: any
 }
 
 export class ApplicationInstall extends DocumentAbstract {

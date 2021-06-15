@@ -6,6 +6,8 @@ import DIContainer from '../../../DIContainer/Container';
 import CommonLoader from '../../../Commons/CommonLoader';
 import TestBasicApplication from '../../../../test/Application/TestBasicApplication';
 import { ApplicationInstall } from '../../Database/ApplicationInstall';
+import CryptManager from '../../../Crypt/CryptManager';
+import WindWalkerCrypt from '../../../Crypt/Impl/WindWalkerCrypt';
 
 let appManager: ApplicationManager;
 let dbClient: MongoDbClient;
@@ -31,7 +33,8 @@ describe('ApplicationManager tests', () => {
   }
 
   beforeEach(async () => {
-    dbClient = new MongoDbClient(storageOptions.dsn);
+    const cryptManager = new CryptManager([new WindWalkerCrypt('123')]);
+    dbClient = new MongoDbClient(storageOptions.dsn, cryptManager);
     const container = new DIContainer();
     const app = new TestBasicApplication();
     container.setApplication(app.getName(), app);
@@ -39,7 +42,7 @@ describe('ApplicationManager tests', () => {
     appManager = new ApplicationManager(dbClient, loader);
 
     appInstall = new ApplicationInstall();
-    appInstall.setUser('user').setKey('test');
+    appInstall.setUser('user').setKey('test').setSettings({ key: 'value' });
 
     await dbClient.getRepository(ApplicationInstall).insert(appInstall);
   });
@@ -52,16 +55,20 @@ describe('ApplicationManager tests', () => {
   it('applications', () => {
     expect(appManager.applications).toEqual(['test']);
   });
+
   it('getApplication', () => {
     expect(appManager.getApplication('test')).toBeInstanceOf(TestBasicApplication);
   });
+
   it('getSynchronousActions', () => {
     expect(appManager.getSynchronousActions('test')).toEqual(['testSyncMethod']);
   });
+
   it('runSynchronousAction', () => {
     expect(appManager.runSynchronousAction('test', 'testSyncMethod',
       mockRequest())).toEqual('{"param1":"p1","param2":"p2"}');
   });
+
   it('saveApplicationSettings', async () => {
     const appSettings = {
       param1: 'p1',
@@ -69,18 +76,21 @@ describe('ApplicationManager tests', () => {
     const dbInstall = await appManager.saveApplicationSettings('test', 'user', appSettings);
 
     expect(dbInstall.getId() !== '').toBeTruthy();
-    expect(dbInstall.getSettings()).toEqual({});
+    expect(dbInstall.getSettings()).toEqual({ key: 'value' });
   });
+
   it('saveApplicationPassword', async () => {
     const dbInstall = await appManager.saveApplicationPassword('test', 'user', 'passs');
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    expect(dbInstall.getSettings()).toEqual({ authorization_settings: { password: 'passs' } });
+    expect(dbInstall.getSettings()).toEqual({ key: 'value', authorization_settings: { password: 'passs' } });
   });
+
   xit('authorizationApplication', async () => {
     // TODO: otestovat na OAuth2 Applikaci
     const dbInstall = await appManager.authorizationApplication('test', 'user', 'http://testRedirect.com');
     expect(dbInstall).toEqual('');
   });
+
   xit('saveAuthorizationToken', async () => {
     // TODO: otestovat na OAuth2 Applikaci
     const dbInstall = await appManager.saveAuthorizationToken('test', 'user', 'testToken');

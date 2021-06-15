@@ -75,13 +75,7 @@ describe('CryptManager tests', () => {
     // eslint-disable-next-line no-useless-escape
     arr.push('docker://dkr.hanaboso.net/pipes/pipes/php-dev:dev/php /opt/project/pf-bundles/vendor/phpunit/phpunit/phpunit --configuration /opt/project/pf-bundles/phpunit.xml.dist CommonsBundleTests\Unit\Commons\Crypt\CryptServiceProviderTest /opt/project/pf-bundles/tests/Unit/Commons/Crypt/CryptServiceProviderTest.php --teamcity');
     arr.push(['1', '2', 3, ['abc']]);
-
-    const obj = {
-      true: true,
-      false: false,
-      arr,
-    };
-    arr.push(obj);
+    arr.push({ true: true, false: false });
 
     arr.forEach((item) => {
       const encrypted = man.encrypt(item);

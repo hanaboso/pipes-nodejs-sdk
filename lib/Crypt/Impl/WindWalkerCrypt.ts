@@ -3,6 +3,7 @@ import {
   pbkdf2Sync,
   pseudoRandomBytes,
 } from 'crypto';
+import { serialize, unserialize } from 'php-serialize';
 import {
   crypto_secretbox_KEYBYTES,
   crypto_secretbox_MACBYTES,
@@ -11,8 +12,8 @@ import {
   randombytes_buf,
   sodium_memzero,
 } from 'sodium-native';
-import { deserialize, serialize } from 'v8';
 import { Buffer } from 'buffer';
+import NodeCache from 'node-cache';
 import CryptImplAbstract from '../CryptImplAbstract';
 
 const PBKDF2_SALT_BYTE_SIZE = 32;
@@ -22,6 +23,8 @@ const SHA256 = 'sha256';
 const BASE64 = 'base64';
 
 export default class WindWalkerCrypt extends CryptImplAbstract {
+  private _cache;
+
   private _secureHMACKey = ''
 
   private _pbkdf2Salt?: Buffer
@@ -30,16 +33,19 @@ export default class WindWalkerCrypt extends CryptImplAbstract {
 
   constructor(private _secretKey: string, prefix = '002_') {
     super(prefix);
+
+    this._cache = new NodeCache({ stdTTL: 3600, checkperiod: 120 });
   }
 
-  public encrypt(data: unknown): string {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
+  public encrypt(data: any): string {
     this._derivativeSecureKeys(this._getKey());
     const key = this._getKey();
     const iv = this._getIVKey();
     const salt = this._getPbkdf2Salt();
-    const encrypted = WindWalkerCrypt._doEncrypt(serialize(data), key, iv);
+    const encrypted = WindWalkerCrypt._doEncrypt(Buffer.from(serialize(data)), key, iv);
     const hmac = createHmac(SHA256, this._secureHMACKey)
-      .update(`${salt}${iv}${encrypted}`)
+      .update(Buffer.concat([salt, iv, encrypted]))
       .digest();
 
     const res = [
@@ -56,7 +62,8 @@ export default class WindWalkerCrypt extends CryptImplAbstract {
     return `${this.getPrefix()}${res.join(':')}`;
   }
 
-  public decrypt(data: string): unknown {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public decrypt(data: string): any {
     if (!data.startsWith(this.getPrefix())) {
       throw Error('Unknown prefix in hash.');
     }
@@ -74,9 +81,8 @@ export default class WindWalkerCrypt extends CryptImplAbstract {
     encrypted = Buffer.from(encrypted, BASE64);
 
     this._derivativeSecureKeys(this._getKey(), pbkdf2Salt);
-
     const calculatedHmac = createHmac(SHA256, this._secureHMACKey)
-      .update(`${pbkdf2Salt}${ivFromData}${encrypted}`)
+      .update(Buffer.concat([pbkdf2Salt, ivFromData, encrypted]))
       .digest();
 
     if (!WindWalkerCrypt._equalHashes(calculatedHmac, hmac)) {
@@ -89,7 +95,7 @@ export default class WindWalkerCrypt extends CryptImplAbstract {
     sodium_memzero(pbkdf2Salt);
     sodium_memzero(calculatedHmac);
 
-    return deserialize(decrypted);
+    return unserialize(decrypted);
   }
 
   private _getPbkdf2Salt(): Buffer {
@@ -121,8 +127,13 @@ export default class WindWalkerCrypt extends CryptImplAbstract {
       pbkdf2SaltBuff = pbkdf2Salt;
     }
 
-    const buff = pbkdf2Sync(key, pbkdf2SaltBuff, 12000, PBKDF2_HASH_BYTE_SIZE * 2, 'sha256');
-    [, this._secureHMACKey] = WindWalkerCrypt._strSplit(buff.toString('binary'), PBKDF2_HASH_BYTE_SIZE);
+    if (!this._cache.has(`pbkdf2_${key}_${pbkdf2SaltBuff}`)) {
+      const pbkdf2 = pbkdf2Sync(key, pbkdf2SaltBuff, 12000, PBKDF2_HASH_BYTE_SIZE, 'sha256');
+      this._cache.set(`pbkdf2_${key}_${pbkdf2SaltBuff}`, pbkdf2);
+    }
+
+    const buff = this._cache.get(`pbkdf2_${key}_${pbkdf2SaltBuff}`) as Buffer;
+    [, this._secureHMACKey] = WindWalkerCrypt._strSplit(buff.toString('hex'), PBKDF2_HASH_BYTE_SIZE);
   }
 
   private static _repeatToLength(key: string, length: number) {

@@ -1,14 +1,16 @@
 import { MongoClient } from 'mongodb';
-import { ClassType, Repository } from 'mongodb-typescript';
+import { ClassType } from 'mongodb-typescript';
 import logger from '../../Logger/Logger';
 import { IDocument } from './DocumentAbstract';
+import Repository from './Repository';
+import CryptManager from '../../Crypt/CryptManager';
 
 export default class MongoDbClient {
   private readonly _client: MongoClient
 
   private _connectionPromise?: Promise<void> = undefined;
 
-  constructor(private _dsn: string) {
+  constructor(private _dsn: string, private _cryptManager: CryptManager) {
     this._client = new MongoClient(this._dsn, { useUnifiedTopology: true });
     this.reconnect();
   }
@@ -40,6 +42,6 @@ export default class MongoDbClient {
       this.waitOnConnect();
     }
 
-    return new Repository(className, this._client, (className as unknown as IDocument).collection);
+    return new Repository(className, this._client, (className as unknown as IDocument).collection, this._cryptManager);
   }
 }

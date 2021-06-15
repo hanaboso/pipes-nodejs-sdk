@@ -14,11 +14,13 @@ export default class CryptManager {
     });
   }
 
-  public encrypt(data: unknown, prefix?: string): string {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
+  public encrypt(data: any, prefix?: string): string {
     return this._getImplementation(prefix).encrypt(data);
   }
 
-  public decrypt(data: string): unknown {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public decrypt(data: string): any {
     const prefix = data.substr(0, PREFIX_LENGTH);
 
     return this._getImplementation(prefix).decrypt(data);
