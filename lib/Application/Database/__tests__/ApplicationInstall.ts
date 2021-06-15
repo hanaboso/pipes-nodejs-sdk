@@ -1,5 +1,6 @@
 import { ApplicationInstall } from '../ApplicationInstall';
 import DateTimeUtils, { DATE_TIME } from '../../../Utils/DateTimeUtils';
+import exp from "constants";
 
 describe('ApplicationInstall tests', () => {
   const appInstall = new ApplicationInstall();
@@ -56,5 +57,10 @@ describe('ApplicationInstall tests', () => {
     const sett = 'hash123';
     appInstall.setEncryptedSettings(sett);
     expect(appInstall.encryptedSettings).toEqual(sett);
+  });
+  it('setExpires', function () {
+    const date = DateTimeUtils.utcDate;
+    appInstall.setExpires(date);
+    expect(appInstall.expires).toEqual(date);
   });
 });

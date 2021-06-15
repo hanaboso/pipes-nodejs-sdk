@@ -1,5 +1,5 @@
-import {ApplicationInstall} from "../../../../Application/Database/ApplicationInstall";
-import {IApplication} from "../../../../Application/Base/IApplication";
+import {IApplication} from "../../../Application/Base/IApplication";
+import {ApplicationInstall} from "../../../Application/Database/ApplicationInstall";
 
 export const CLIENT_ID = 'client_id';
 export const CLIENT_SECRET = 'client_secret';

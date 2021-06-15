@@ -1,21 +1,20 @@
-import ApplicationAbstract, {AUTHORIZATION_SETTINGS, FORM} from "../../../../Application/Base/ApplicationAbstract";
+import {COMMA} from "../../../Utils/ScopeFormatter";
 import {CLIENT_ID, CLIENT_SECRET, FRONTEND_REDIRECT_URL, IOAuth2Application} from "./IOAuth2Application";
-import {ApplicationInstall, IApplicationSettings} from "../../../../Application/Database/ApplicationInstall";
-import {COMMA} from "../../../../Utils/ScopeFormatter";
-import AuthorizationTypeEnum from "../../../AuthorizationTypeEnum";
-import {TOKEN} from "../BasicApplicationAbstract";
-import Form from "../../../../Application/Model/Form/Form";
-import Field from "../../../../Application/Model/Form/Field";
-import FieldType from "../../../../Application/Model/Form/FieldType";
-import {ACCESS_TOKEN, EXPIRES, OAuth2Provider} from "../../../Provider/OAuth2Provider";
-import {OAuth2Dto} from "../../../Provider/Dto/OAuth2Dto";
+import ApplicationAbstract, {AUTHORIZATION_SETTINGS, FORM} from "../../../Application/Base/ApplicationAbstract";
+import {ACCESS_TOKEN, EXPIRES, IToken, OAuth2Provider} from "../../Provider/OAuth2Provider";
+import AuthorizationTypeEnum from "../../AuthorizationTypeEnum";
+import {ApplicationInstall, IApplicationSettings} from "../../../Application/Database/ApplicationInstall";
+import {TOKEN} from "../Basic/BasicApplicationAbstract";
+import Field, {IFieldArray} from "../../../Application/Model/Form/Field";
+import FieldType from "../../../Application/Model/Form/FieldType";
+import {OAuth2Dto} from "../../Provider/Dto/OAuth2Dto";
+
 
 const SCOPE_SEPARATOR = COMMA;
 const CREDENTIALS = [
     CLIENT_ID,
     CLIENT_SECRET,
 ];
-
 
 export abstract class OAuth2ApplicationAbstract extends ApplicationAbstract implements IOAuth2Application {
 
@@ -39,8 +38,8 @@ export abstract class OAuth2ApplicationAbstract extends ApplicationAbstract impl
         return !!applicationInstall.settings[AUTHORIZATION_SETTINGS][TOKEN][ACCESS_TOKEN];
     }
 
-    getApplicationForm(applicationInstall: ApplicationInstall): Form {
-        let form = super.getApplicationForm(applicationInstall);
+    getApplicationForm(applicationInstall: ApplicationInstall): IFieldArray[] {
+        let formFields = super.getApplicationForm(applicationInstall);
 
         const redirectField = new Field(
             FieldType.TEXT,
@@ -49,9 +48,9 @@ export abstract class OAuth2ApplicationAbstract extends ApplicationAbstract impl
             this.provider.getRedirectUri(),
         ).setReadOnly(true).toArray;
 
-        form.push(redirectField);
+        formFields.push(redirectField);
 
-        return form;
+        return formFields;
     }
 
     getFrontendRedirectUrl(applicationInstall: ApplicationInstall): string {
@@ -64,12 +63,16 @@ export abstract class OAuth2ApplicationAbstract extends ApplicationAbstract impl
             this.getTokens(applicationInstall),
         );
 
-        if (token[EXPIRES]) {
-            applicationInstall
+        if (Object.prototype.hasOwnProperty.call(token, EXPIRES) && typeof token[EXPIRES] !== 'undefined') {
+            applicationInstall.setExpires(token[EXPIRES]);
         }
+
+        let settings = applicationInstall.settings;
+        settings[AUTHORIZATION_SETTINGS][TOKEN] = token;
+        return applicationInstall;
     }
 
-    setAuthorizationToken(applicationInstall: ApplicationInstall, token: unknown[]): IOAuth2Application {
+    setAuthorizationToken(applicationInstall: ApplicationInstall, token: string): IOAuth2Application {
         const tokenFromProvider = this.provider.getAccessToken(this.createDto(applicationInstall), token);
         if (Object.prototype.hasOwnProperty.call(tokenFromProvider, 'expires')) {
             applicationInstall.key
@@ -118,7 +121,7 @@ export abstract class OAuth2ApplicationAbstract extends ApplicationAbstract impl
         return dto;
     }
 
-    getTokens(applicationInstall: ApplicationInstall): string {
+    getTokens(applicationInstall: ApplicationInstall): IToken {
         return applicationInstall.settings[AUTHORIZATION_SETTINGS][TOKEN];
     }
 }

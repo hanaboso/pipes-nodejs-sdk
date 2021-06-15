@@ -119,4 +119,9 @@ export class ApplicationInstall {
       this._nonEncryptedSettings = { ...this._nonEncryptedSettings, ...nonEncryptedSettings };
       return this;
     }
+
+    setExpires(expires:Date) : ApplicationInstall{
+        this._expires = expires;
+        return this;
+    }
 }
