@@ -1,122 +1,122 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+import { ignore } from 'mongodb-typescript';
 import DateTimeUtils, { DATE_TIME } from '../../Utils/DateTimeUtils';
+import DocumentAbstract from '../../Storage/Mongodb/DocumentAbstract';
 
 export interface IApplicationSettings {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [key: string]: any;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any
 }
 
-export interface IApplicationInstallArray {
-    id: string,
-    user: string,
-    key: string,
-    settings: IApplicationSettings,
-    nonEncryptedSettings: IApplicationSettings,
-    created: string,
-    update: string,
-    expires: string | null,
-}
+export class ApplicationInstall extends DocumentAbstract {
+  private deleted = false;
 
-export class ApplicationInstall {
-    private _id = '';
+  private user = '';
 
-    private _deleted = false;
+  private key = '';
 
-    private _user = '';
+  private readonly created: Date;
 
-    private _key = '';
+  private readonly updated: Date;
 
-    private readonly _created: Date;
+  private expires?: Date;
 
-    private readonly _updated: Date;
+  @ignore
+  private settings: IApplicationSettings = {};
 
-    private _expires?: Date;
+  private encryptedSettings = '';
 
-    private _settings: IApplicationSettings = {};
+  private nonEncryptedSettings: IApplicationSettings = {};
 
-    private _encryptedSettings = '';
+  public constructor() {
+    super();
+    this.created = DateTimeUtils.utcDate;
+    this.updated = DateTimeUtils.utcDate;
+  }
 
-    private _nonEncryptedSettings: IApplicationSettings = {};
+  public getSettings(): IApplicationSettings {
+    return this.settings;
+  }
 
-    public constructor() {
-      this._created = DateTimeUtils.utcDate;
-      this._updated = DateTimeUtils.utcDate;
-    }
+  public getEncryptedSettings(): string {
+    return this.encryptedSettings;
+  }
 
-    get settings(): IApplicationSettings {
-      return this._settings;
-    }
+  public getNonEncryptedSettings(): IApplicationSettings {
+    return this.nonEncryptedSettings;
+  }
 
-    get encryptedSettings(): string {
-      return this._encryptedSettings;
-    }
+  public getCreated(): Date {
+    return this.created;
+  }
 
-    get nonEncryptedSettings(): IApplicationSettings {
-      return this._nonEncryptedSettings;
-    }
+  public getUpdated(): Date {
+    return this.updated;
+  }
 
-    get id(): string {
-      return this._id;
-    }
+  public getDeleted(): boolean {
+    return this.deleted;
+  }
 
-    get created(): Date {
-      return this._created;
-    }
+  public getUser(): string {
+    return this.user;
+  }
 
-    get updated(): Date {
-      return this._updated;
-    }
+  public setUser(user: string): ApplicationInstall {
+    this.user = user;
 
-    get deleted(): boolean {
-      return this._deleted;
-    }
+    return this;
+  }
 
-    get user(): string {
-      return this._user;
-    }
+  public getExpires(): Date | undefined {
+    return this.expires;
+  }
 
-    get expires(): Date | undefined {
-      return this._expires;
-    }
+  public getKey(): string {
+    return this.key;
+  }
 
-    get key(): string {
-      return this._key;
-    }
+  public setKey(key: string): ApplicationInstall {
+    this.key = key;
 
-    get toArray(): IApplicationInstallArray {
-      return {
-        id: this.id,
-        user: this.user,
-        key: this.key,
-        settings: this.settings,
-        nonEncryptedSettings: this.nonEncryptedSettings,
-        created: DateTimeUtils.getFormattedDate(this.created, DATE_TIME),
-        update: DateTimeUtils.getFormattedDate(this.updated, DATE_TIME),
-        expires: this.expires ? DateTimeUtils.getFormattedDate(this.expires, DATE_TIME) : null,
-      };
-    }
+    return this;
+  }
 
-    setSettings(settings: IApplicationSettings): ApplicationInstall {
-      this._settings = settings;
-      return this;
-    }
+  public setSettings(settings: IApplicationSettings): ApplicationInstall {
+    this.settings = settings;
+    return this;
+  }
 
-    setNonEncryptedSettings(nonEncryptedSettings: IApplicationSettings): ApplicationInstall {
-      this._nonEncryptedSettings = nonEncryptedSettings;
-      return this;
-    }
+  public setNonEncryptedSettings(nonEncryptedSettings: IApplicationSettings): ApplicationInstall {
+    this.nonEncryptedSettings = nonEncryptedSettings;
+    return this;
+  }
 
-    setEncryptedSettings(encryptedSettings: string): ApplicationInstall {
-      this._encryptedSettings = encryptedSettings;
-      return this;
-    }
+  public setEncryptedSettings(encryptedSettings: string): ApplicationInstall {
+    this.encryptedSettings = encryptedSettings;
+    return this;
+  }
 
-    addSettings(setting: IApplicationSettings): ApplicationInstall {
-      this._settings = { ...this._settings, ...setting };
-      return this;
-    }
+  public addSettings(setting: IApplicationSettings): ApplicationInstall {
+    this.settings = { ...this.settings, ...setting };
+    return this;
+  }
 
-    addNonEncryptedSettings(nonEncryptedSettings: IApplicationSettings): ApplicationInstall {
-      this._nonEncryptedSettings = { ...this._nonEncryptedSettings, ...nonEncryptedSettings };
-      return this;
-    }
+  public addNonEncryptedSettings(nonEncryptedSettings: IApplicationSettings): ApplicationInstall {
+    this.nonEncryptedSettings = { ...this.nonEncryptedSettings, ...nonEncryptedSettings };
+    return this;
+  }
+
+  public toArray(): {[key: string]: unknown} {
+    return {
+      id: this._id?.toHexString() ?? '',
+      user: this.user,
+      key: this.key,
+      settings: this.settings,
+      nonEncryptedSettings: this.nonEncryptedSettings,
+      created: DateTimeUtils.getFormattedDate(this.created, DATE_TIME),
+      update: DateTimeUtils.getFormattedDate(this.updated, DATE_TIME),
+      expires: this.expires ? DateTimeUtils.getFormattedDate(this.expires, DATE_TIME) : null,
+    };
+  }
 }

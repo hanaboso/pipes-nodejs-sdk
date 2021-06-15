@@ -974,13 +974,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.6.17":
-  version: 3.6.17
-  resolution: "@types/mongodb@npm:3.6.17"
+"@types/mongodb@npm:^3.6.18":
+  version: 3.6.18
+  resolution: "@types/mongodb@npm:3.6.18"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
-  checksum: c96504ab4b3a07d1bee2a9614c55ec12a035d4564999fb3f6bfdf61ccc71c24bcbaa2af2ae177de44a7b4987397794f51e067533de45db5e995aadc2a3764af8
+  checksum: 6828e73bf8e98f261898a5b1e48d43873216f21726ec6a2b9a381e5413082ad4886e4581fe2c48fc61c6bd0f7dd8c7f1855d5b38493cdba402711958a3ba64b9
+  languageName: node
+  linkType: hard
+
+"@types/node-cache@npm:^4.2.5":
+  version: 4.2.5
+  resolution: "@types/node-cache@npm:4.2.5"
+  dependencies:
+    node-cache: "*"
+  checksum: e8d2276a233dc366c06c8f8e32e87510ea68e21850c15a88a98b47d6b7892345c9c0372045a1e8bee803aebaf93a89e1195d39db36c5c485b496c75b0947a83e
   languageName: node
   linkType: hard
 
@@ -1005,6 +1014,15 @@ __metadata:
   version: 15.12.2
   resolution: "@types/node@npm:15.12.2"
   checksum: 26b9170eb825656751955e919dcea7963d1be4d1eba361c67e41b51a55436c51d69d63f49ee98aaf4fe2e0e5eb3c0038408a8f542316b7583e9badf4fdd10024
+  languageName: node
+  linkType: hard
+
+"@types/php-serialize@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@types/php-serialize@npm:3.0.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: 13ae96888736851e4bf13f9e071772c85b52356170b2273c554424edef6a4d05371b704ca28040667149f5140be2db846089f181b9e0ce023355a174725ab3b2
   languageName: node
   linkType: hard
 
@@ -1995,7 +2013,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clone@npm:^2.1.2":
+"clone@npm:2.x, clone@npm:^2.1.2":
   version: 2.1.2
   resolution: "clone@npm:2.1.2"
   checksum: 85232d66015d2d703dc59812e30049931d97c7815bf70569ae4fb7a66be257f46fcf47040e4e7050966ca195a9e615d59d73ba9e39fc37eedba1a76865f27ab1
@@ -5190,6 +5208,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-cache@npm:*, node-cache@npm:^5.1.2":
+  version: 5.1.2
+  resolution: "node-cache@npm:5.1.2"
+  dependencies:
+    clone: 2.x
+  checksum: 2790fee0366b9c2f747106cbfeaf2b5f60b20201320dd77ebd097d51703c406898aa1c84819cc57fd54a39962bba413956eb721a7a04357add241c53471b4818
+  languageName: node
+  linkType: hard
+
 "node-fetch@npm:^2.6.1":
   version: 2.6.1
   resolution: "node-fetch@npm:2.6.1"
@@ -5670,6 +5697,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"php-serialize@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "php-serialize@npm:4.0.2"
+  checksum: fc550ac339ab999067bf8daa9d48667caf4c4ddd1f21067502a9a279569def459988c6fbf228a6c661344e8289b9acdb310d8c8d6c735da7cddb61d669372d65
+  languageName: node
+  linkType: hard
+
 "picomatch@npm:^2.0.4, picomatch@npm:^2.2.1, picomatch@npm:^2.2.3":
   version: 2.3.0
   resolution: "picomatch@npm:2.3.0"
@@ -5691,9 +5725,11 @@ __metadata:
     "@types/dateformat": ^3.0.1
     "@types/express": ^4.17.12
     "@types/jest": ^26.0.23
-    "@types/mongodb": ^3.6.17
+    "@types/mongodb": ^3.6.18
     "@types/node": ^15.12.2
+    "@types/node-cache": ^4.2.5
     "@types/node-fetch": ^2.5.10
+    "@types/php-serialize": ^3.0.0
     "@types/sodium-native": ^2.3.5
     "@types/supertest": ^2.0.11
     "@typescript-eslint/eslint-plugin": ^4.26.1
@@ -5709,8 +5745,10 @@ __metadata:
     metrics-sender: ^0.0.10
     mongodb: ^3.6.9
     mongodb-typescript: ^2.2.1
+    node-cache: ^5.1.2
     node-fetch: ^2.6.1
     nodemon: ^2.0.7
+    php-serialize: ^4.0.2
     reflect-metadata: ^0.1.13
     sodium-native: ^3.2.1
     supertest: ^6.1.3
