@@ -14,5 +14,5 @@ export interface IOAuth2Application extends IApplication {
 
     setFrontendRedirectUrl(applicationInstall: ApplicationInstall, redirectUrl: string): IOAuth2Application;
 
-    setAuthorizationToken(applicationInstall: ApplicationInstall, token: string): IOAuth2Application;
+    setAuthorizationToken(applicationInstall: ApplicationInstall, token: string[]): IOAuth2Application;
 }

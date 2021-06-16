@@ -18,3 +18,7 @@ export const appOptions = {
   port: parseInt(process.env.APP_PORT || '8080', 10),
   debug: (process.env.APP_DEBUG === 'debug'),
 };
+
+export const cryptOptions = {
+  secret: process.env.CRYPT_SECRET || 'ThisIsNotSoSecret',
+};
