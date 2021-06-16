@@ -9,7 +9,7 @@ export class OAuth2Dto implements IOAuth2Dto {
     private clientSecret: string = '';
     private redirectUrl: string = '';
     private user: string = '';
-    private applicationKey: string = '';
+    private applicationName: string = '';
 
     constructor(authorization: ApplicationInstall, private authorizeUrl: string, private tokenUrl: string) {
         this.clientId = authorization.settings[AUTHORIZATION_SETTINGS][CLIENT_ID] ?? '';
@@ -17,48 +17,48 @@ export class OAuth2Dto implements IOAuth2Dto {
     }
 
 
-    getApplicationKey(): string {
-        return this.applicationKey;
+    public getApplicationKey(): string {
+        return this.applicationName;
     }
 
-    getAuthorizationUrl(): string {
+    public getAuthorizationUrl(): string {
         return this.authorizeUrl;
     }
 
-    getClientId(): string {
+    public getClientId(): string {
         return this.clientId;
     }
 
-    getClientSecret(): string {
+    public getClientSecret(): string {
         return this.clientSecret;
     }
 
-    getRedirectUrl(): string {
+    public getRedirectUrl(): string {
         return this.redirectUrl;
     }
 
-    getTokenUrl(): string {
+    public getTokenUrl(): string {
         return this.tokenUrl;
     }
 
-    getUser(): string {
+    public getUser(): string {
         return this.user;
     }
 
-    isCustomApp(): boolean {
-        return (!!this.user && !!this.applicationKey);
+    public isCustomApp(): boolean {
+        return (!!this.user && !!this.applicationName);
     }
 
-    isRedirectUrl(): boolean {
+    public isRedirectUrl(): boolean {
         return !!this.redirectUrl;
     }
 
-    setCustomAppDependencies(user: string, applicationKey: string): void {
+    public setCustomAppDependencies(user: string, applicationName: string): void {
         this.user = user;
-        this.applicationKey = applicationKey;
+        this.applicationName = applicationName;
     }
 
-    setRedirectUrl(redirectUrl: string): IOAuth2Dto {
+    public setRedirectUrl(redirectUrl: string): IOAuth2Dto {
         this.redirectUrl = redirectUrl;
         return this;
     }

@@ -1,7 +1,6 @@
-import {COMMA} from "../../../Utils/ScopeFormatter";
 import {CLIENT_ID, CLIENT_SECRET, FRONTEND_REDIRECT_URL, IOAuth2Application} from "./IOAuth2Application";
 import ApplicationAbstract, {AUTHORIZATION_SETTINGS, FORM} from "../../../Application/Base/ApplicationAbstract";
-import {ACCESS_TOKEN, EXPIRES, IToken, OAuth2Provider} from "../../Provider/OAuth2Provider";
+import {ACCESS_TOKEN, COMMA, EXPIRES, IToken, OAuth2Provider} from "../../Provider/OAuth2Provider";
 import AuthorizationTypeEnum from "../../AuthorizationTypeEnum";
 import {ApplicationInstall, IApplicationSettings} from "../../../Application/Database/ApplicationInstall";
 import {TOKEN} from "../Basic/BasicApplicationAbstract";
@@ -57,8 +56,8 @@ export abstract class OAuth2ApplicationAbstract extends ApplicationAbstract impl
         return applicationInstall.settings[AUTHORIZATION_SETTINGS][FRONTEND_REDIRECT_URL];
     }
 
-    refreshAuthorization(applicationInstall: ApplicationInstall): ApplicationInstall {
-        const token = this.provider.refreshAccessToken(
+    async refreshAuthorization(applicationInstall: ApplicationInstall): Promise<ApplicationInstall> {
+        const token =  await this.provider.refreshAccessToken(
             this.createDto(applicationInstall),
             this.getTokens(applicationInstall),
         );

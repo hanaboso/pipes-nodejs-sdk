@@ -8,7 +8,7 @@ export const FRONTEND_REDIRECT_URL = 'frontend_redirect_url';
 export interface IOAuth2Application extends IApplication {
     authorize(applicationInstall: ApplicationInstall): string;
 
-    refreshAuthorization(applicationInstall: ApplicationInstall): ApplicationInstall;
+    refreshAuthorization(applicationInstall: ApplicationInstall): Promise<ApplicationInstall>;
 
     getFrontendRedirectUrl(applicationInstall: ApplicationInstall): string;
 

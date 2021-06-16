@@ -1164,6 +1164,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/simple-oauth2@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@types/simple-oauth2@npm:4.1.0"
+  checksum: de9297b41469503f5f2b797d3d57380eee88c7c87b6cb6d251b889bab933de26d39ef3235a04675d7f30d48a86f539768f9856a812003a2786d20d601f205321
+  languageName: node
+  linkType: hard
+
 "@types/sodium-native@npm:^2.3.5":
   version: 2.3.5
   resolution: "@types/sodium-native@npm:2.3.5"
@@ -5877,6 +5884,7 @@ __metadata:
     "@types/passport": ^1.0.6
     "@types/passport-local": ^1.0.33
     "@types/passport-oauth2": ^1.4.10
+    "@types/simple-oauth2": ^4.1.0
     "@types/sodium-native": ^2.3.5
     "@types/supertest": ^2.0.11
     "@typescript-eslint/eslint-plugin": ^4.26.1

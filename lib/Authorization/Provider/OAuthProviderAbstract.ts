@@ -7,7 +7,7 @@ export class OAuthProviderAbstract implements IOAuthProvider {
     constructor(private backend: string) {
     }
 
-    getRedirectUri(): string {
+    public getRedirectUri(): string {
         return util.format(
             '%s/%s',
             this.backend.replace('/', ''),
@@ -15,7 +15,7 @@ export class OAuthProviderAbstract implements IOAuthProvider {
         );
     }
 
-    throwException(message: string, code: number): void {
+    public throwException(message: string, code: number): void {
         logger.error(message);
         throw new Error('Message: ' + message + ' code: ' + code);
     }
