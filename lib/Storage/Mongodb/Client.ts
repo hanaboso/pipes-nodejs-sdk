@@ -12,7 +12,6 @@ export default class MongoDbClient {
 
   constructor(private _dsn: string, private _cryptManager: CryptManager) {
     this._client = new MongoClient(this._dsn, { useUnifiedTopology: true });
-    this.reconnect();
   }
 
   public async waitOnConnect(): Promise<void> {

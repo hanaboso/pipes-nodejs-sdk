@@ -53,7 +53,7 @@ describe('ApplicationManager tests', () => {
   });
 
   it('applications', () => {
-    expect(appManager.applications).toEqual(['test']);
+    expect(appManager.getApplications()).toEqual(['test']);
   });
 
   it('getApplication', () => {
@@ -93,8 +93,7 @@ describe('ApplicationManager tests', () => {
 
   xit('saveAuthorizationToken', async () => {
     // TODO: otestovat na OAuth2 Applikaci
-    const dbInstall = await appManager.saveAuthorizationToken('test', 'user', 'testToken');
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    expect(dbInstall).toEqual({ redirect_url: 'aa' });
+    const dbInstall = await appManager.saveAuthorizationToken('test', 'user', ['testToken']);
+    expect(dbInstall).toEqual('url');
   });
 });

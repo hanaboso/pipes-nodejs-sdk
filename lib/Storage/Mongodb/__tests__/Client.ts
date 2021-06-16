@@ -14,15 +14,14 @@ jest.mock('../../../Logger/Logger', () => ({
 describe('Test MongoDb Storage', () => {
   const cryptManager = new CryptManager([new WindWalkerCrypt('123')]);
   const dbClient = new MongoDbClient(storageOptions.dsn, cryptManager);
-  beforeAll(async () => {
-    await dbClient.waitOnConnect();
-  });
 
   afterAll(async () => {
     await dbClient.down();
   });
 
-  it('IsConnected', () => {
+  it('IsConnected', async () => {
+    dbClient.reconnect();
+    await dbClient.waitOnConnect();
     expect(dbClient.isConnected()).toBeTruthy();
   }, 200);
 });
