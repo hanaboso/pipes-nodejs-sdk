@@ -17,11 +17,10 @@ export default class ApplicationManager {
         private _client: MongoDbClient,
         private _loader: CommonLoader,
     ) {
-      this._client.getRepository(ApplicationInstall);
       this._repository = this._client.getRepository(ApplicationInstall) as Repository<ApplicationInstall>;
     }
 
-    public get applications(): string[] {
+    public getApplications(): string[] {
       return this._loader.getList(APPLICATION_PREFIX);
     }
 
@@ -44,7 +43,7 @@ export default class ApplicationManager {
         }
         return app[syncMethod](request);
       }
-      throw new Error(`Method ${syncMethod} was not found for applicaton ${key}`);
+      throw new Error(`Method ${syncMethod} has not found in application ${key}.`);
     }
 
     public async saveApplicationSettings(
@@ -74,15 +73,20 @@ export default class ApplicationManager {
       return app.authorize(appInstall);
     }
 
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    public async saveAuthorizationToken(key: string, user: string, token: string): Promise<{ redirect_url: string}> {
+    public async saveAuthorizationToken(
+      key: string,
+      user: string,
+      requestParams: string[],
+    ): Promise<string> {
       const app = this.getApplication(key) as IOAuth2Application;
       const appInstall = await this._loadApplicationInstall(key, user);
 
+      // TODO: missing call of OAuthProvider
+      // const token = provider.getAccessToken(requestParams)
+      const token = requestParams;
       app.setAuthorizationToken(appInstall, token);
 
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      return { redirect_url: app.getFrontendRedirectUrl(appInstall) };
+      return app.getFrontendRedirectUrl(appInstall);
     }
 
     private async _loadApplicationInstall(key: string, user: string): Promise<ApplicationInstall> {
