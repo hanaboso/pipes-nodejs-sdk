@@ -1,3 +1,5 @@
+Repository archived. Please use: [https://github.com/Orchesty/orchesty-nodejs-sdk](https://github.com/Orchesty/orchesty-nodejs-sdk)
+
 # NODE.JS Orchesty SDK
 
 # TODO:
